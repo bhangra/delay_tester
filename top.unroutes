@@ -1,0 +1,24 @@
+Release 10.1.03 - par K.39 (lin64)
+Copyright (c) 1995-2008 Xilinx, Inc.  All rights reserved.
+
+Mon Jul 11 23:48:48 2011
+
+All signals are completely routed.
+
+WARNING:ParHelpers:361 - There are 12 loadless signals in this design. This design will cause Bitgen to issue DRC
+   warnings.
+
+   rgmii_0_rx_ctl_IBUF
+   rgmii_0_rxc_IBUF
+   rgmii_0_rxd<0>_IBUF
+   rgmii_0_rxd<1>_IBUF
+   rgmii_0_rxd<2>_IBUF
+   rgmii_0_rxd<3>_IBUF
+   rgmii_1_rx_ctl_IBUF
+   rgmii_1_rxc_IBUF
+   rgmii_1_rxd<0>_IBUF
+   rgmii_1_rxd<1>_IBUF
+   rgmii_1_rxd<2>_IBUF
+   rgmii_1_rxd<3>_IBUF
+
+

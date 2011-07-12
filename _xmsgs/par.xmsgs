@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- IMPORTANT: This is an internal file that has been generated
+     by the Xilinx ISE software.  Any direct editing or
+     changes made to this file may result in unpredictable
+     behavior or data corruption.  It is strongly advised that
+     users do not edit the contents of this file. -->
+<messages>
+<msg type="warning" file="Par" num="288" delta="unknown" >The signal <arg fmt="%s" index="1">rgmii_1_rxc_IBUF</arg> has no load.  PAR will not attempt to route this signal.
+</msg>
+
+<msg type="warning" file="Par" num="288" delta="unknown" >The signal <arg fmt="%s" index="1">rgmii_0_rx_ctl_IBUF</arg> has no load.  PAR will not attempt to route this signal.
+</msg>
+
+<msg type="warning" file="Par" num="288" delta="unknown" >The signal <arg fmt="%s" index="1">rgmii_0_rxd&lt;0&gt;_IBUF</arg> has no load.  PAR will not attempt to route this signal.
+</msg>
+
+<msg type="warning" file="Par" num="288" delta="unknown" >The signal <arg fmt="%s" index="1">rgmii_0_rxd&lt;1&gt;_IBUF</arg> has no load.  PAR will not attempt to route this signal.
+</msg>
+
+<msg type="warning" file="Par" num="288" delta="unknown" >The signal <arg fmt="%s" index="1">rgmii_0_rxd&lt;2&gt;_IBUF</arg> has no load.  PAR will not attempt to route this signal.
+</msg>
+
+<msg type="warning" file="Par" num="288" delta="unknown" >The signal <arg fmt="%s" index="1">rgmii_0_rxd&lt;3&gt;_IBUF</arg> has no load.  PAR will not attempt to route this signal.
+</msg>
+
+<msg type="warning" file="Par" num="288" delta="unknown" >The signal <arg fmt="%s" index="1">rgmii_1_rx_ctl_IBUF</arg> has no load.  PAR will not attempt to route this signal.
+</msg>
+
+<msg type="warning" file="Par" num="288" delta="unknown" >The signal <arg fmt="%s" index="1">rgmii_1_rxd&lt;0&gt;_IBUF</arg> has no load.  PAR will not attempt to route this signal.
+</msg>
+
+<msg type="warning" file="Par" num="288" delta="unknown" >The signal <arg fmt="%s" index="1">rgmii_1_rxd&lt;1&gt;_IBUF</arg> has no load.  PAR will not attempt to route this signal.
+</msg>
+
+<msg type="warning" file="Par" num="288" delta="unknown" >The signal <arg fmt="%s" index="1">rgmii_1_rxd&lt;2&gt;_IBUF</arg> has no load.  PAR will not attempt to route this signal.
+</msg>
+
+<msg type="warning" file="Par" num="288" delta="unknown" >The signal <arg fmt="%s" index="1">rgmii_1_rxd&lt;3&gt;_IBUF</arg> has no load.  PAR will not attempt to route this signal.
+</msg>
+
+<msg type="warning" file="Par" num="288" delta="unknown" >The signal <arg fmt="%s" index="1">rgmii_0_rxc_IBUF</arg> has no load.  PAR will not attempt to route this signal.
+</msg>
+
+<msg type="info" file="Place" num="834" delta="unknown" >Only a subset of IOs are locked. Out of <arg fmt="%d" index="1">29</arg> IOs, <arg fmt="%d" index="2">28</arg> are locked and <arg fmt="%d" index="3">1</arg> are not locked. <arg fmt="%s" index="4">If you would like to print the names of these IOs, please set the environment variable XIL_PAR_DESIGN_CHECK_VERBOSE to 1.</arg> 
+</msg>
+
+<msg type="info" file="Timing" num="2761" delta="unknown" >N/A entries in the Constraints list may indicate that the constraint does not cover any paths or that it has no requested value.</msg>
+
+<msg type="warning" file="Par" num="283" delta="unknown" >There are <arg fmt="%d" index="1">12</arg> loadless signals in this design. This design will cause Bitgen to issue DRC warnings.
+
+</msg>
+
+<msg type="warning" file="ParHelpers" num="361" delta="unknown" >There are <arg fmt="%d" index="1">12</arg> loadless signals in this design. This design will cause Bitgen to issue DRC warnings.
+
+</msg>
+
+</messages>
+
