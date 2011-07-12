@@ -63,7 +63,7 @@ module gig_eth_mac_tx
 	
 	reg			mac_tx_ack_out_reg;
 	wire		mac_tx_ack_out_reg_next;
-	reg	[7:0]	gmii_txd_out_reg;
+	reg [7:0]	gmii_txd_out_reg;
 	reg [7:0]	gmii_txd_out_reg_next;
 	reg			gmii_txen_out_reg;
 	wire		gmii_txen_out_reg_next;
@@ -170,8 +170,8 @@ module gig_eth_mac_tx
 	 	tx_state_next = tx_state;
 	 	if(mac_tx_dvld && mac_tx_underrun)
 			tx_state_next = TX_CORRUPT_FRAME;
-	 else begin
-		case(tx_state)
+		else begin
+		  case(tx_state)
 			TX_READY: begin
 				if(mac_tx_dvld_in_reg)
 					tx_state_next = TX_ONE_CYCLE_DELAY;
