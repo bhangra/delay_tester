@@ -33,10 +33,18 @@ module frame_sender(
 
 );
 	//	Local Parameters
-	localparam MAC_ADDR			= 48'h004e46324300;
+	localparam MAC_ADDR		= 48'h004e46324300;
+	localparam OPT_IPV4		= 16'h0800;
+	localparam OPT_ARP		= 16'h0806;
+	localparam OPT_RARP		= 16'h8035;
+	localparam OPT_IPV6		= 16'h86DD;
 /*
-	localparam READY			=
-	localparam Preamble
+	localparam READY		=
+	localparam PREAMBLE		=
+	localparam MAC_DEST		=
+	localparam MAC_SNDR		=
+	localparam ETH_TYPE		=
+	localparam DATA			=
 */
 	//	Wires & Regs
 	reg			conf_tx_en_out_reg;
@@ -54,22 +62,24 @@ module frame_sender(
 	//	0th netfpga Ethernet port's MAC address
 	reg	[6*8-1:0]	MAC_addr;
 
-	assign conf_tx_en			= conf_tx_en_out_reg;
+	assign conf_tx_en		= conf_tx_en_out_reg;
 	assign conf_tx_jumbo_en		= conf_tx_jumbo_en_out_reg;
 	assign conf_tx_no_gen_crc	= conf_tx_no_gen_crc_out_reg;
 
-	assign mac_tx_data			= mac_tx_data_out_reg;
-	assign mac_tx_dvld			= mac_tx_dvld_out_reg;
+	assign mac_tx_data		= mac_tx_data_out_reg;
+	assign mac_tx_dvld		= mac_tx_dvld_out_reg;
+
+
 
 	//	Sequential Logic
 	always @(posedge tx_clk or posedge reset) begin
 		if (reset) begin
-			conf_tx_en_out_reg			<= 1'b0;
+			conf_tx_en_out_reg		<= 1'b0;
 			conf_tx_jumbo_en_out_reg	<= 1'b0;
 			conf_tx_no_gen_crc_out_reg	<= 1'b0;
-			mac_tx_data_out_reg			<= 8'h00;
-			mac_tx_dvld_out_reg			<= 1'b0;
-			MAC_addr					<= MAC_ADDR;
+			mac_tx_data_out_reg		<= 8'h00;
+			mac_tx_dvld_out_reg		<= 1'b0;
+			MAC_addr			<= MAC_ADDR;
 
 		end
 
