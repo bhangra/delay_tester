@@ -75,3 +75,24 @@ map -ise "/home/bhangra/projects/delay_tester/delay_tester.ise" -intstyle ise -p
 par -ise "/home/bhangra/projects/delay_tester/delay_tester.ise" -w -intstyle ise -ol std -t 1 top_map.ncd top.ncd top.pcf
 trce -ise "/home/bhangra/projects/delay_tester/delay_tester.ise" -intstyle ise -v 3 -s 7 -xml top top.ncd -o top.twr top.pcf -ucf top.ucf
 bitgen -ise "/home/bhangra/projects/delay_tester/delay_tester.ise" -intstyle ise -f top.ut top.ncd
+xst -ise "/home/bhangra/projects/delay_tester/delay_tester.ise" -intstyle ise -ifn "/home/bhangra/projects/delay_tester/top.xst" -ofn "/home/bhangra/projects/delay_tester/top.syr"
+xst -ise "/home/bhangra/projects/delay_tester/delay_tester.ise" -intstyle ise -ifn "/home/bhangra/projects/delay_tester/top.xst" -ofn "/home/bhangra/projects/delay_tester/top.syr"
+ngdbuild -ise "/home/bhangra/projects/delay_tester/delay_tester.ise" -intstyle ise -dd _ngo  -nt timestamp -i -p xc2vp50-ff1152-7 "top.ngc" top.ngd
+map -ise "/home/bhangra/projects/delay_tester/delay_tester.ise" -intstyle ise -p xc2vp50-ff1152-7 -cm area -pr off -k 4 -c 100 -tx off -o top_map.ncd top.ngd top.pcf
+par -ise "/home/bhangra/projects/delay_tester/delay_tester.ise" -w -intstyle ise -ol std -t 1 top_map.ncd top.ncd top.pcf
+trce -ise "/home/bhangra/projects/delay_tester/delay_tester.ise" -intstyle ise -v 3 -s 7 -xml top top.ncd -o top.twr top.pcf -ucf top.ucf
+bitgen -ise "/home/bhangra/projects/delay_tester/delay_tester.ise" -intstyle ise -f top.ut top.ncd
+xst -ise "/home/bhangra/projects/delay_tester/delay_tester.ise" -intstyle ise -ifn "/home/bhangra/projects/delay_tester/top.xst" -ofn "/home/bhangra/projects/delay_tester/top.syr"
+ngdbuild -ise "/home/bhangra/projects/delay_tester/delay_tester.ise" -intstyle ise -dd _ngo  -nt timestamp -i -p xc2vp50-ff1152-7 "top.ngc" top.ngd
+map -ise "/home/bhangra/projects/delay_tester/delay_tester.ise" -intstyle ise -p xc2vp50-ff1152-7 -cm area -pr off -k 4 -c 100 -tx off -o top_map.ncd top.ngd top.pcf
+par -ise "/home/bhangra/projects/delay_tester/delay_tester.ise" -w -intstyle ise -ol std -t 1 top_map.ncd top.ncd top.pcf
+trce -ise "/home/bhangra/projects/delay_tester/delay_tester.ise" -intstyle ise -v 3 -s 7 -xml top top.ncd -o top.twr top.pcf -ucf top.ucf
+bitgen -ise "/home/bhangra/projects/delay_tester/delay_tester.ise" -intstyle ise -f top.ut top.ncd
+bitgen -ise "/home/bhangra/projects/delay_tester/delay_tester.ise" -intstyle ise -f top.ut top.ncd
+xst -ise "/home/bhangra/projects/delay_tester/delay_tester.ise" -intstyle ise -ifn "/home/bhangra/projects/delay_tester/top.xst" -ofn "/home/bhangra/projects/delay_tester/top.syr"
+ngdbuild -ise "/home/bhangra/projects/delay_tester/delay_tester.ise" -intstyle ise -dd _ngo  -nt timestamp -i -p xc2vp50-ff1152-7 "top.ngc" top.ngd
+map -ise "/home/bhangra/projects/delay_tester/delay_tester.ise" -intstyle ise -p xc2vp50-ff1152-7 -cm area -pr off -k 4 -c 100 -tx off -o top_map.ncd top.ngd top.pcf
+par -ise "/home/bhangra/projects/delay_tester/delay_tester.ise" -w -intstyle ise -ol std -t 1 top_map.ncd top.ncd top.pcf
+trce -ise "/home/bhangra/projects/delay_tester/delay_tester.ise" -intstyle ise -v 3 -s 7 -xml top top.ncd -o top.twr top.pcf -ucf top.ucf
+bitgen -ise "/home/bhangra/projects/delay_tester/delay_tester.ise" -intstyle ise -f top.ut top.ncd
+xst -ise "/home/bhangra/projects/delay_tester/delay_tester.ise" -intstyle ise -ifn "/home/bhangra/projects/delay_tester/top.xst" -ofn "/home/bhangra/projects/delay_tester/top.syr"

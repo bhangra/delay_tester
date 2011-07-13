@@ -177,6 +177,5 @@ module nf_core(
 		.mac_tx_ack			(gmac_tx_ack_0)
 	);
 
-	);
 
 endmodule

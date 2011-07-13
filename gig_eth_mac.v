@@ -89,6 +89,9 @@ gig_eth_mac_tx#(
 (
 	.reset				(reset),
 	.tx_clk				(tx_clk),
+	.conf_tx_en			(conf_tx_en),
+	.conf_tx_jumbo_en	(conf_tx_jumbo_en),
+	.conf_tx_no_gen_crc	(conf_tx_no_gen_crc),
 	.mac_tx_data		(mac_tx_data),
 	.mac_tx_dvld		(mac_tx_dvld),
 	.mac_tx_ack			(mac_tx_ack),

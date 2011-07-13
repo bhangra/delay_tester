@@ -34,17 +34,24 @@ module frame_sender(
 );
 	//	Local Parameters
 	localparam MAC_ADDR		= 48'h004e46324300;
+	localparam USER_PRIORITY	= 4'b0000;
+	localparam CFI			= 2'b00;
+	localparam VID			= 12'h000; //note set
+
+	
 	localparam OPT_IPV4		= 16'h0800;
 	localparam OPT_ARP		= 16'h0806;
 	localparam OPT_RARP		= 16'h8035;
 	localparam OPT_IPV6		= 16'h86DD;
 /*
 	localparam READY		=
-	localparam PREAMBLE		=
+//	Preamble created in gig_eth_mac_tx module
+//	localparam PREAMBLE		= 
 	localparam MAC_DEST		=
 	localparam MAC_SNDR		=
 	localparam ETH_TYPE		=
 	localparam DATA			=
+	
 */
 	//	Wires & Regs
 	reg			conf_tx_en_out_reg;
