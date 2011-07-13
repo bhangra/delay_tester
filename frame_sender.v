@@ -49,7 +49,7 @@ module frame_sender(
 	localparam IDOL			= 4'd0;
 //assign mac_tx_ack_out_reg_next  = tx_state == TX_PREAMBLE && tx_counter == 7;
 	localparam WAIT_PREAMBLE	= 4'd1;
-	localparam MAC_DEST		= 4'd2;
+	localparam MAC_DST		= 4'd2;
 	localparam MAC_SRC		= 4'd3;
 	localparam ETH_TYPE		= 4'd4;
 	localparam DATA			= 4'd5;
@@ -93,19 +93,35 @@ module frame_sender(
 		send_counter_next	= send_counter + 1;
 	end
 
+//	Send MAC
 	always @* begin
-	//	send MAC
-	  if(tx_state	== MAC_DST)
-		mac_tx_data_out_reg_next = MAC_dst_addr[(7-send_counter)*8-1:(6-(send_counter))*8];
-	  if(tx_state	== MAC_SRC)
-		mac_tx_data_out_reg_next = MAC_src_addr[(7-send_counter)*8-1:(6-send_counter))*8];
+	  if(send_state	== MAC_DST)
+	    case(send_counter)
+			1:	mac_tx_data_out_reg_next = MAC_dst_addr[6*8-1:5*8];
+			2:	mac_tx_data_out_reg_next = MAC_dst_addr[5*8-1:4*8];
+			3:	mac_tx_data_out_reg_next = MAC_dst_addr[4*8-1:3*8];
+			4:	mac_tx_data_out_reg_next = MAC_dst_addr[3*8-1:2*8];
+			5:	mac_tx_data_out_reg_next = MAC_dst_addr[2*8-1:1*8];
+			6:	mac_tx_data_out_reg_next = MAC_dst_addr[1*8-1:0*8];
+		endcase
+	  if(send_state	== MAC_SRC)
+	  	case(send_counter)
+			1:	mac_tx_data_out_reg_next = MAC_src_addr[6*8-1:5*8];
+			2:	mac_tx_data_out_reg_next = MAC_src_addr[5*8-1:4*8];
+			3:	mac_tx_data_out_reg_next = MAC_src_addr[4*8-1:3*8];
+			4:	mac_tx_data_out_reg_next = MAC_src_addr[3*8-1:2*8];
+			5:	mac_tx_data_out_reg_next = MAC_src_addr[2*8-1:1*8];
+			6:	mac_tx_data_out_reg_next = MAC_src_addr[1*8-1:0*8];
+		endcase
+	  else
+	  			mac_tx_data_out_reg_next = 8'b00000000;
 	end
 
 //	State Machine
 	always @* begin
 		case(send_state)
 		  IDOL: begin
-			if(send_count = 1000)
+			if(send_counter == 1000)
 				send_state_next = WAIT_PREAMBLE;
 		  end
 		  WAIT_PREAMBLE: begin
@@ -113,18 +129,19 @@ module frame_sender(
 				send_state_next = MAC_DST;
 		  end
 		  MAC_DST: begin
-			if(send_count = 6)
+			if(send_counter == 6)
 				send_state_next = MAC_SRC;
 		  end
 		  MAC_SRC: begin
-			if(send_count = 6)
+			if(send_counter == 6)
 				send_state_next = ETH_TYPE;
 		  end
 		  ETH_TYPE: begin
-			if(send_count = 2)
+			if(send_counter == 2)
 				send_state_next = DATA;
 		  end
 		endcase
+	end
 
 	//	Sequential Logic
 	always @(posedge tx_clk or posedge reset) begin
@@ -139,11 +156,12 @@ module frame_sender(
 			send_state			<= IDOL;
 			send_counter			<= 0;
 		end
+		else begin
 			mac_tx_data_out_reg		<= mac_tx_data_out_reg_next;
-			mac_tx_data_dvld_out_reg	<= mac_tx_data_dvld_out_reg_next;		
+			mac_tx_dvld_out_reg		<= mac_tx_dvld_out_reg_next;		
 			mac_tx_ack_in_reg		<= mac_tx_ack;
-			send_counter			<= send_state_counter_next;
-			mac_tx_data_out_reg		<= mac_tx_data_out_reg_next;
+			send_counter			<= send_counter_next;
+		end
 	end
 
 endmodule
