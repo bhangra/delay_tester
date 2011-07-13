@@ -5,7 +5,7 @@
     The structure and the elements are likely to change over the next few releases.
     This means code written to parse this file will need to be revisited each subsequent release.-->
 
-  <application stringID="Map" timeStamp="Wed Jul 13 22:23:08 2011">
+  <application stringID="Map" timeStamp="Wed Jul 13 22:26:00 2011">
     <task stringID="MAP_PACK_REPORT">
       <section stringID="MAP_DESIGN_INFORMATION">
         <item stringID="MAP_PART" value="2vp50ff1152-7"/>
@@ -18,7 +18,7 @@
         <item dataType="int" stringID="MAP_NUM_ERRORS" value="0"/>
         <item dataType="int" stringID="MAP_FILTERED_WARNINGS" value="0"/>
         <item dataType="int" stringID="MAP_NUM_WARNINGS" value="15"/>
-        <item UNITS="KB" dataType="int" stringID="MAP_PEAK_MEMORY" value="501176"/>
+        <item UNITS="KB" dataType="int" stringID="MAP_PEAK_MEMORY" value="501180"/>
         <item stringID="MAP_TOTAL_REAL_TIME" value="2 secs "/>
         <item stringID="MAP_TOTAL_CPU_TIME" value="2 secs "/>
       </section>

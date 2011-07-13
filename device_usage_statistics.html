@@ -17,7 +17,7 @@
 </TR>
 <TR ALIGN=LEFT>
 <TD BGCOLOR='#FFFF99'><B>Project ID (random number)</B></TD>
-<TD><xtag-property name="RandomID">23623</xtag-property>.<xtag-property name="ProjectID">12730</xtag-property>.<xtag-property name="ProjectIteration">8</xtag-property></TD>
+<TD><xtag-property name="RandomID">3460</xtag-property>.<xtag-property name="ProjectID">12730</xtag-property>.<xtag-property name="ProjectIteration">9</xtag-property></TD>
 <TD BGCOLOR='#FFFF99'><B>Target Package:</B></TD>
 <TD><xtag-property name="TargetPackage">ff1152</xtag-property></TD>
 </TR>
@@ -29,7 +29,7 @@
 </TR>
 <TR ALIGN=LEFT>
 <TD BGCOLOR='#FFFF99'><B>Date Generated</B></TD>
-<TD><xtag-property name="Date Generated">Wed Jul 13 22:23:45 2011</xtag-property></TD>
+<TD><xtag-property name="Date Generated">Wed Jul 13 22:26:37 2011</xtag-property></TD>
 </TR>
 </TABLE>
 &nbsp;<BR><TABLE BORDER CELLSPACING=0 WIDTH='100%'>
@@ -37,17 +37,18 @@
 <TR ALIGN=CENTER BGCOLOR='#FFFF99'><TD><B>Macro Statistics</B></TD><TD><B>Miscellaneous Statistics</B></TD><TD><B>Net Statistics</B></TD><TD><B>Site Usage</B></TD></TR><TR VALIGN=TOP>
 <xtag-section name="MacroStatistics">
 <TD>
-<xtag-group><xtag-group-name name=" Comparators=10"> Comparators=10</xtag-group-name>
+<xtag-group><xtag-group-name name=" Comparators=12"> Comparators=12</xtag-group-name>
 <UL>
 <LI><xtag-item1>14-bit comparator equal=2</xtag-item1></LI>
 <LI><xtag-item1>14-bit comparator greater=4</xtag-item1></LI>
 <LI><xtag-item1>14-bit comparator less=2</xtag-item1></LI>
 <LI><xtag-item1>7-bit comparator not equal=2</xtag-item1></LI>
+<LI><xtag-item1>9-bit comparator not equal=2</xtag-item1></LI>
 </UL>
 </xtag-group>
-<xtag-group><xtag-group-name name=" Adders/Subtractors=2"> Adders/Subtractors=2</xtag-group-name>
+<xtag-group><xtag-group-name name=" Adders/Subtractors=4"> Adders/Subtractors=4</xtag-group-name>
 <UL>
-<LI><xtag-item1>14-bit adder=2</xtag-item1></LI>
+<LI><xtag-item1>14-bit adder=4</xtag-item1></LI>
 </UL>
 </xtag-group>
 <xtag-group><xtag-group-name name=" ROMs=2"> ROMs=2</xtag-group-name>
@@ -55,9 +56,9 @@
 <LI><xtag-item1>4x14-bit ROM=2</xtag-item1></LI>
 </UL>
 </xtag-group>
-<xtag-group><xtag-group-name name=" Registers=448"> Registers=448</xtag-group-name>
+<xtag-group><xtag-group-name name=" Registers=482"> Registers=482</xtag-group-name>
 <UL>
-<LI><xtag-item1>Flip-Flops=448</xtag-item1></LI>
+<LI><xtag-item1>Flip-Flops=482</xtag-item1></LI>
 </UL>
 </xtag-group>
 <xtag-group><xtag-group-name name=" Counters=2"> Counters=2</xtag-group-name>
@@ -437,13 +438,20 @@
 <LI><xtag-cmdline>par -ise &lt;ise_file&gt; -w -intstyle ise -ol std -t 1 &lt;fname&gt;.ncd &lt;fname&gt;.ncd &lt;fname&gt;.pcf</xtag-cmdline></LI>
 <LI><xtag-cmdline>trce -ise &lt;ise_file&gt; -intstyle ise -v 3 -s 7 -xml &lt;design&gt; &lt;fname&gt;.ncd -o &lt;fname&gt;.twr &lt;fname&gt;.pcf -ucf &lt;fname&gt;.ucf</xtag-cmdline></LI>
 <LI><xtag-cmdline>bitgen -ise &lt;ise_file&gt; -intstyle ise -f &lt;fname&gt;.ut &lt;fname&gt;.ncd</xtag-cmdline></LI>
+<LI><xtag-cmdline>xst -ise &lt;ise_file&gt;</xtag-cmdline></LI>
+<LI><xtag-cmdline>xst -ise &lt;ise_file&gt;</xtag-cmdline></LI>
+<LI><xtag-cmdline>ngdbuild -ise &lt;ise_file&gt; &lt;fname&gt;.ngd</xtag-cmdline></LI>
+<LI><xtag-cmdline>map -ise &lt;ise_file&gt; -intstyle ise -p xc2vp50-ff1152-7 -cm area -pr off -k 4 -c 100 -tx off -o &lt;fname&gt;.ncd &lt;fname&gt;.ngd &lt;fname&gt;.pcf</xtag-cmdline></LI>
+<LI><xtag-cmdline>par -ise &lt;ise_file&gt; -w -intstyle ise -ol std -t 1 &lt;fname&gt;.ncd &lt;fname&gt;.ncd &lt;fname&gt;.pcf</xtag-cmdline></LI>
+<LI><xtag-cmdline>trce -ise &lt;ise_file&gt; -intstyle ise -v 3 -s 7 -xml &lt;design&gt; &lt;fname&gt;.ncd -o &lt;fname&gt;.twr &lt;fname&gt;.pcf -ucf &lt;fname&gt;.ucf</xtag-cmdline></LI>
+<LI><xtag-cmdline>bitgen -ise &lt;ise_file&gt; -intstyle ise -f &lt;fname&gt;.ut &lt;fname&gt;.ncd</xtag-cmdline></LI>
 </xtag-section></UL></TD></TR>
 </TABLE>
 &nbsp;<BR><TABLE BORDER CELLSPACING=0 WIDTH='100%'><xtag-section name="RunStatistics"><TR ALIGN=CENTER BGCOLOR='#99CCFF'><TD COLSPAN=8><B>Software Quality</B></TD></TR><TR ALIGN=LEFT><TD COLSPAN=8><B>Run Statistics</B></TD></TR><TR><TD>Program</TD>><TD>Runs Started</TD><TD>Runs Finished</TD><TD>Errors</TD><TD>Fatal Errors</TD><TD>Internal Errors</TD><TD>Exceptions</TD><TD>Core Dumps</TD></TR>
 <tr>
   <td><xtag-program-name>bitgen</xtag-program-name></td>
-  <td><xtag-total-run-started>14</xtag-total-run-started></td>
-  <td><xtag-total-run-finished>14</xtag-total-run-finished></td>
+  <td><xtag-total-run-started>15</xtag-total-run-started></td>
+  <td><xtag-total-run-finished>15</xtag-total-run-finished></td>
   <td><xtag-total-error>0</xtag-total-error></td>
   <td><xtag-total-fatal-error>0</xtag-total-fatal-error></td>
   <td><xtag-total-internal-error>0</xtag-total-internal-error></td>
@@ -462,8 +470,8 @@
 </tr>
 <tr>
   <td><xtag-program-name>map</xtag-program-name></td>
-  <td><xtag-total-run-started>52</xtag-total-run-started></td>
-  <td><xtag-total-run-finished>13</xtag-total-run-finished></td>
+  <td><xtag-total-run-started>53</xtag-total-run-started></td>
+  <td><xtag-total-run-finished>14</xtag-total-run-finished></td>
   <td><xtag-total-error>0</xtag-total-error></td>
   <td><xtag-total-fatal-error>0</xtag-total-fatal-error></td>
   <td><xtag-total-internal-error>0</xtag-total-internal-error></td>
@@ -492,8 +500,8 @@
 </tr>
 <tr>
   <td><xtag-program-name>ngdbuild</xtag-program-name></td>
-  <td><xtag-total-run-started>60</xtag-total-run-started></td>
-  <td><xtag-total-run-finished>60</xtag-total-run-finished></td>
+  <td><xtag-total-run-started>61</xtag-total-run-started></td>
+  <td><xtag-total-run-finished>61</xtag-total-run-finished></td>
   <td><xtag-total-error>0</xtag-total-error></td>
   <td><xtag-total-fatal-error>0</xtag-total-fatal-error></td>
   <td><xtag-total-internal-error>0</xtag-total-internal-error></td>
@@ -502,8 +510,8 @@
 </tr>
 <tr>
   <td><xtag-program-name>par</xtag-program-name></td>
-  <td><xtag-total-run-started>14</xtag-total-run-started></td>
-  <td><xtag-total-run-finished>14</xtag-total-run-finished></td>
+  <td><xtag-total-run-started>15</xtag-total-run-started></td>
+  <td><xtag-total-run-finished>15</xtag-total-run-finished></td>
   <td><xtag-total-error>0</xtag-total-error></td>
   <td><xtag-total-fatal-error>0</xtag-total-fatal-error></td>
   <td><xtag-total-internal-error>0</xtag-total-internal-error></td>
@@ -512,8 +520,8 @@
 </tr>
 <tr>
   <td><xtag-program-name>trce</xtag-program-name></td>
-  <td><xtag-total-run-started>14</xtag-total-run-started></td>
-  <td><xtag-total-run-finished>14</xtag-total-run-finished></td>
+  <td><xtag-total-run-started>15</xtag-total-run-started></td>
+  <td><xtag-total-run-finished>15</xtag-total-run-finished></td>
   <td><xtag-total-error>0</xtag-total-error></td>
   <td><xtag-total-fatal-error>0</xtag-total-fatal-error></td>
   <td><xtag-total-internal-error>0</xtag-total-internal-error></td>
@@ -522,8 +530,8 @@
 </tr>
 <tr>
   <td><xtag-program-name>xst</xtag-program-name></td>
-  <td><xtag-total-run-started>166</xtag-total-run-started></td>
-  <td><xtag-total-run-finished>166</xtag-total-run-finished></td>
+  <td><xtag-total-run-started>168</xtag-total-run-started></td>
+  <td><xtag-total-run-finished>168</xtag-total-run-finished></td>
   <td><xtag-total-error>0</xtag-total-error></td>
   <td><xtag-total-fatal-error>0</xtag-total-fatal-error></td>
   <td><xtag-total-internal-error>0</xtag-total-internal-error></td>
