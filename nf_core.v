@@ -98,7 +98,7 @@ module nf_core(
 		.mac_tx_data		(gmac_tx_data_0),
 		.mac_tx_dvld		(gmac_tx_dvld_0),
 		.mac_tx_ack			(gmac_tx_ack_0),
-		.mac_tx_underrun	(1'b1),
+		.mac_tx_underrun	(1'b0),
 
 	//	RX GMII Interface
 		.gmii_rx_data		(gmii_0_rxd_reg),
