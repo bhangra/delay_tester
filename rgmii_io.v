@@ -262,8 +262,8 @@ module rgmii_io(
 	);
 	FDDRRSE rgmii_tx_ctl_out(
 		.Q	(rgmii_tx_ctl_obuf),
-		.D0	(rgmii_tx_en_rising),
-		.D1	(gmii_tx_ctl_falling),
+		.D0	(gmii_tx_en_rising),
+		.D1	(rgmii_tx_ctl_falling),
 		.C0	(tx_rgmii_clk_int),
 		.C1	(not_tx_rgmii_clk_int),
 		.CE	(1'b1),
