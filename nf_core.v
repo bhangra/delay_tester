@@ -107,8 +107,8 @@ module nf_core(
 
 	//	TX GMII Interface
 		.gmii_tx_data		(gmii_0_txd_int),
-		.gmii_tx_en			(gmii_0_txd_en_int),
-		.gmii_tx_er			(gmii_0_txd_er_int),
+		.gmii_tx_en			(gmii_0_tx_en_int),
+		.gmii_tx_er			(gmii_0_tx_er_int),
 
 		.gmii_col			(gmii_0_col_int),
 		.gmii_crs			(gmii_0_crs_int)

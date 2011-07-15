@@ -177,7 +177,7 @@ module rgmii_io(
 		.C0	(tx_rgmii_clk90_int),
 		.C1	(not_tx_rgmii_clk90_int),
 		.CE	(1'b1),
-		.R		(1'b1),
+		.R		(1'b0),
 		.S		(1'b0)
 	);
 	assign	not_tx_rgmii_clk90_int = ~(tx_rgmii_clk90_int);
@@ -260,8 +260,17 @@ module rgmii_io(
 		.R		(reset),
 		.S		(1'b0)
 	);
-	
-	OBUF drive_rgmii_ctl	(.I(rgmii_tx_ctl_obuf), .O(rgmii_tx_ctl));
+	FDDRRSE rgmii_tx_ctl_out(
+		.Q	(rgmii_tx_ctl_obuf),
+		.D0	(rgmii_tx_en_rising),
+		.D1	(gmii_tx_ctl_falling),
+		.C0	(tx_rgmii_clk_int),
+		.C1	(not_tx_rgmii_clk_int),
+		.CE	(1'b1),
+		.R	(reset),
+		.S	(1'b0)
+	);
+	OBUF drive_rgmii_tx_ctl	(.I(rgmii_tx_ctl_obuf), .O(rgmii_tx_ctl));
 	OBUF drive_rgmii_txd3 (.I(rgmii_txd_obuf[3]), .O(rgmii_txd[3]));
 	OBUF drive_rgmii_txd2 (.I(rgmii_txd_obuf[2]), .O(rgmii_txd[2]));
 	OBUF drive_rgmii_txd1 (.I(rgmii_txd_obuf[1]), .O(rgmii_txd[1]));

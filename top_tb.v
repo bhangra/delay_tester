@@ -38,9 +38,9 @@ module top_tbw;
     wire rgmii_1_txc;
     wire [3:0] rgmii_1_txd;
 
-    parameter PERIOD = 200;
+    parameter PERIOD = 8;
     parameter real DUTY_CYCLE = 0.5;
-    parameter OFFSET = 100;
+    parameter OFFSET = 4;
 
     initial    // Clock process for core_clk
     begin
@@ -74,9 +74,9 @@ module top_tbw;
 
     initial begin
         // -------------  Current Time:  100ns
-        #10;
+        #80;
         nf2_reset = 1'b1;
-	#12;
+	#88;
 	nf2_reset = 1'b0;
         // -------------------------------------
     end

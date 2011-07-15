@@ -72,7 +72,7 @@ module frame_sender(
 
 	localparam GEN_VALID_FRAME	= 4'hd;
 	localparam GEN_CHKSUM		= 4'he;
-	localparam FINISH			= 4'hf;
+	localparam RESET			= 4'hf;
 	
 	//	Wires & Regs
 	reg		conf_tx_en_out_reg;
@@ -105,7 +105,7 @@ module frame_sender(
 	reg [16*32-1:0]	IP_HDR_reg;
 
 //	Frame Storing Register
-	reg [8*16*4-1:0] valid_arp; //64*8 <- 56*8 = 448;
+	reg [8*64-1:0] valid_arp; //64*8 <- 56*8 = 448;
 
 	// Assigning Wires
 	assign conf_tx_en		= conf_tx_en_out_reg;
@@ -132,7 +132,7 @@ module frame_sender(
 	end
 
 //	Send MAC
-	always @* begin
+	always @ (posedge tx_clk) begin
 /*	  if(send_state	== MAC_DST)
 	    case(send_counter)
 			1:	mac_tx_data_out_reg_next = MAC_dst_addr[6*8-1:5*8];
@@ -162,9 +162,10 @@ module frame_sender(
 			conf_tx_en_out_reg_next			= 1'b1;
 			conf_tx_jumbo_en_out_reg_next	= 1'b0;
 			conf_tx_no_gen_crc_out_reg_next	= 1'b0;
-			valid_arp[8*(3*16+8)-1:0]		= 	448'hFFFFFFFFFFFF0022FA157ada0806010800060400010022FA157ADACBB28BD5000000000000CBB28B9F0000000000000000000000000000;
 	end
-	
+	if (send_state == RESET) begin	
+			valid_arp[8*(64)-1:8*(64-56)]	=   448'hFFFFFFFFFFFF0022FA157ada0806010800060400010022FA157ADACBB28BD5000000000000CBB28B9F0000000000000000000000000000;
+	end
 	else  if (send_state == WAIT_FOR_ACK) 
 		if(send_state_next == DATA) begin
 			mac_tx_data_out_reg_next[7:0] = valid_arp[8*64-1:8*63];
@@ -173,8 +174,8 @@ module frame_sender(
 	else  if (send_state == DATA) begin
 	  		mac_tx_data_out_reg_next[7:0] = valid_arp[8*64-1:8*63];
 			valid_arp[8*64-1:8*1] = valid_arp[8*63-1:8*0];
-		end
-	  else
+	end
+  	else
 	  			mac_tx_data_out_reg_next = 8'b00000000;
 	end
 
@@ -211,8 +212,8 @@ module frame_sender(
 			if(send_counter == (56-1))
 				send_state_next = IDOL;
 		  end
-		  FINISH: begin
-
+		  RESET: begin
+			send_state_next = IDOL;
 		  end
 		endcase
 	end
@@ -225,7 +226,7 @@ module frame_sender(
 			conf_tx_no_gen_crc_out_reg	<= 1'b0;
 			mac_tx_data_out_reg		<= 8'h00;
 			mac_tx_dvld_out_reg		<= 1'b0;
-			send_state			<= IDOL;
+			send_state			<= RESET;
 			send_counter			<= 0;
 		end
 		else begin
@@ -235,6 +236,7 @@ module frame_sender(
 			mac_tx_data_out_reg		<= mac_tx_data_out_reg_next;
 			mac_tx_dvld_out_reg		<= mac_tx_dvld_out_reg_next;		
 			mac_tx_ack_in_reg		<= mac_tx_ack;
+			send_state				<= send_state_next;
 			send_counter			<= send_counter_next;
 		end
 	end
