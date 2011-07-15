@@ -49,7 +49,6 @@ module frame_sender(
 //	IP Parameters
 //	IP Header Length(h) & Version(l) Field
 //	No Option Fields: 5*4*8bits long
-/*
 	localparam IPV4_HDRLEN_5	= 8'b01010100;	
 	localparam IPV4_TOS_ALL_0	= 8'b00000000;
 	localparam IPV4_TOTAL_LEN	= (IPV4_HDRLEN_5-4)/8; // + IPV4_DATA_LEN); 16bit wide
@@ -61,7 +60,6 @@ module frame_sender(
 //	localparam IPV4_SDR_ADDR	= 
 	localparam IPV4_BROADCAST	= 32'hFFFFFFFF;
 //	localparam IPV4_DATA_LENGTH	= 
-*/
 
 //	State Machine Parameters
 	localparam IDOL				= 4'd0;
@@ -159,12 +157,20 @@ module frame_sender(
 			2:	mac_tx_data_out_reg_next = ETH_type[1*8-1:0*8];
 		endcase
 */
-	if (send_state == WAIT_FOR_ACK) 
+//	Generate Frames
+	if (send_state == GEN_VALID_FRAME) begin
+			conf_tx_en_out_reg_next			= 1'b1;
+			conf_tx_jumbo_en_out_reg_next	= 1'b0;
+			conf_tx_no_gen_crc_out_reg_next	= 1'b0;
+			valid_arp[8*(3*16+8)-1:0]		= 	448'hFFFFFFFFFFFF0022FA157ada0806010800060400010022FA157ADACBB28BD5000000000000CBB28B9F0000000000000000000000000000;
+	end
+	
+	else  if (send_state == WAIT_FOR_ACK) 
 		if(send_state_next == DATA) begin
 			mac_tx_data_out_reg_next[7:0] = valid_arp[8*64-1:8*63];
 			valid_arp[8*64-1:8*1] = valid_arp[8*63-1:8*0];
-		end
-	  if (send_state == DATA) begin
+	  end
+	else  if (send_state == DATA) begin
 	  		mac_tx_data_out_reg_next[7:0] = valid_arp[8*64-1:8*63];
 			valid_arp[8*64-1:8*1] = valid_arp[8*63-1:8*0];
 		end
@@ -172,9 +178,8 @@ module frame_sender(
 	  			mac_tx_data_out_reg_next = 8'b00000000;
 	end
 
-//	Create IPv4 Header
-	always @* begin
 /*
+	always @* begin
 		if (send_state == IDOL && send_state_next == GEN_CHKSUM) begin
 			IP_HDR_reg[1*8-1:0*8] <= IPV4_HDRLEN_5;
 			IP_HDR_reg[2*8-1:1*8] <= IPV4_TOS_ALL_0;
@@ -185,27 +190,19 @@ module frame_sender(
 			IP_HDR_reg[10*8-1:9*8] <= IPV4_UDP_PROTOCOL;
 			IP_HDR_reg[12*8-1:10*8] <= 16'd0;	// Header Checksum		
 		end
-*/
-	//	generate Frame & enable TX
-		if (send_state == GEN_VALID_FRAME) begin
-			conf_tx_en_out_reg_next			<= 1'b1;
-			conf_tx_jumbo_en_out_reg_next	<= 1'b0;
-			conf_tx_no_gen_crc_out_reg_next	<= 1'b0;
-			valid_arp[8*(3*16+8)-1:0]		<= 	448'hFFFFFFFFFFFF0022FA157ada0806010800060400010022FA157ADACBB28BD5000000000000CBB28B9F0000000000000000000000000000;
-		end
 	end
+*/
 
 //	State Machine
 	always @* begin
 		case(send_state)
 		  IDOL: begin
-			if(send_counter == 10000)
+			if(send_counter == 100)
 				send_state_next = GEN_VALID_FRAME;
 		  end
 		  GEN_VALID_FRAME: begin
 				send_state_next = WAIT_FOR_ACK;
 		  end
-
 		  WAIT_FOR_ACK: begin
 			if(mac_tx_ack_in_reg)
 				send_state_next = DATA;
@@ -241,5 +238,4 @@ module frame_sender(
 			send_counter			<= send_counter_next;
 		end
 	end
-
 endmodule
