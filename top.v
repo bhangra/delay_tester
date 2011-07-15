@@ -115,6 +115,10 @@ module top(
 	wire	reset;
 	wire	core_locked;
 	wire	disable_reset;
+
+//	gtx_clk Clock Management
+//	125MHz TX reference clock for the MACs
+
 	IBUF	ibufg_gtx_clk (.I(gtx_clk), .O(gtx_clk_ibufg));
 	
 	//DCM is used to generate 2ns set-up and hold time
@@ -125,6 +129,7 @@ module top(
 		.DSSEN(1'b0),
 		.PSINCDEC(1'b0),
 		.PSEN(1'b0),
+		.PSCLK(1'b0),
 		.RST(reset),
 		.CLK0(tx_clk0),
 		.CLK90(tx_clk90),

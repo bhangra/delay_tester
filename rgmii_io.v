@@ -181,7 +181,7 @@ module rgmii_io(
 		.S		(1'b0)
 	);
 	assign	not_tx_rgmii_clk90_int = ~(tx_rgmii_clk90_int);
-	OBUF drive_rgmii_txc	(.I(rgmii_tx_obuf), .O(rgmii_txc));
+	OBUF drive_rgmii_txc	(.I(rgmii_txc_obuf), .O(rgmii_txc));
 	
 //RGMII transmitter Logic
 //
