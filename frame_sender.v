@@ -105,6 +105,7 @@ module frame_sender(
 
 //	Frame Storing Register
 	reg [8*64-1:0] valid_arp; //64*8 <- 56*8 = 448;
+	reg [8*64-1:0] valid_arp_next;
 
 	// Assigning Wires
 	assign conf_tx_en		= conf_tx_en_out_reg;
@@ -113,14 +114,6 @@ module frame_sender(
 
 	assign mac_tx_data		= mac_tx_data_out_reg;
 	assign mac_tx_dvld		= mac_tx_dvld_out_reg;
-
-	// 	set 0 when not sending & waiting CRC gen
-	mac_tx_dvld_out_reg = 
-		send_state == WAIT_FOR_ACK	||
-		send_state == MAC_DST		||
-		send_state == MAC_SRC		||
-		send_state == ETH_TYPE		||
-		send_state == DATA;
 
 //	Counter
 	always @* begin
@@ -156,14 +149,16 @@ module frame_sender(
 			2:	mac_tx_data_out_reg_next = ETH_type[1*8-1:0*8];
 		endcase
 */
-//	Generate Frames
+//		mac_tx_dvld_out_reg = (send_state == WAIT_FOR_ACK ||    send_state == MAC_DST || send_state == MAC_SRC ||   send_state == ETH_TYPE || send_state == DATA);
+/*
 		if (send_state == GEN_VALID_FRAME) begin
 			conf_tx_en_out_reg_next			= 1'b1;
 			conf_tx_jumbo_en_out_reg_next	= 1'b0;
 			conf_tx_no_gen_crc_out_reg_next	= 1'b0;
 		end
 		if (send_state == RESET) begin	
-			valid_arp[8*(64)-1:8*(64-56)]	=   448'hFFFFFFFFFFFF0022FA157ada0806010800060400010022FA157ADACBB28BD5000000000000CBB28B9F0000000000000000000000000000;
+			mac_tx_data_out_reg				= 8'b00000000; 
+			valid_arp[8*(64)-1:8*(64-55)]	=   448'hFFFFFFFFFFFF0022FA157ada0806010800060400010022FA157ADACBB28BD5000000000000CBB28B9F0000000000000000000000000000;
 	  		mac_tx_data_out_reg = 8'b00000000;
 		end
 		if (send_state == WAIT_FOR_ACK && !mac_tx_ack) begin
@@ -177,6 +172,33 @@ module frame_sender(
 			valid_arp[8*64-1:8*1] = valid_arp[8*63-1:8*0];
 	  		mac_tx_data_out_reg[7:0] = valid_arp[8*64-1:8*63];
 		end
+*/
+		case (send_state)
+			GEN_VALID_FRAME: begin
+				conf_tx_en_out_reg_next			= 1'b1;
+				conf_tx_jumbo_en_out_reg_next 	= 1'b0;
+				conf_tx_no_gen_crc_out_reg_next	= 1'b0;
+				valid_arp_next[8*(64)-1:8*(64-55)]   =   448'hFFFFFFFFFFFF0022FA157ada0806010800060400010022FA157ADACBB28BD5000000000000CBB28B9F0000000000000000000000000000;
+			end
+			RESET: begin
+				mac_tx_data_out_reg             = 8'b00000000; 
+			end
+			WAIT_FOR_ACK: begin
+				if(!mac_tx_ack)
+					mac_tx_data_out_reg[7:0]	= valid_arp[8*64-1:8*63];
+				else if(mac_tx_ack) begin
+					valid_arp_next [8*64-1:8*1]		= valid_arp[8*63-1:8*0];
+					mac_tx_data_out_reg[7:0]	= valid_arp[8*64-1:8*63];
+				end
+			end
+			DATA: begin
+				if(!reset) begin
+					valid_arp_next [8*64-1:8*1]		= valid_arp[8*63-1:8*0];
+					mac_tx_data_out_reg[7:0]	= valid_arp[8*64-1:8*63];
+				end
+			end
+
+		endcase
 	end
 
 /*
@@ -210,7 +232,7 @@ module frame_sender(
 			end
 		  end
 		  DATA: begin
-			if(send_counter == (56-1))
+			if(send_counter == (56-2))
 				send_state_next = IDOL;
 		  end
 		  RESET: begin
@@ -225,7 +247,6 @@ module frame_sender(
 			conf_tx_en_out_reg		<= 1'b0;
 			conf_tx_jumbo_en_out_reg	<= 1'b0;
 			conf_tx_no_gen_crc_out_reg	<= 1'b0;
-			mac_tx_data_out_reg		<= 8'h00;
 			mac_tx_dvld_out_reg		<= 1'b0;
 			send_state			<= RESET;
 			send_counter			<= 0;
@@ -237,8 +258,9 @@ module frame_sender(
 			mac_tx_ack_in_reg		<= mac_tx_ack;
 			send_state				<= send_state_next;
 			send_counter			<= send_counter_next;
+			valid_arp 				<= valid_arp_next;
 			// 	set 0 when not sending & waiting CRC gen
-			mac_tx_dvld_out_reg = 
+			mac_tx_dvld_out_reg <= 
 				send_state == WAIT_FOR_ACK	||
 				send_state == MAC_DST		||
 				send_state == MAC_SRC		||
