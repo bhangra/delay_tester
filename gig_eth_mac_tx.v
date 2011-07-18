@@ -151,7 +151,7 @@ module gig_eth_mac_tx
 	 endcase
 	end
 
-	assign min_data_length = (conf_tx_no_gen_crc_reg ? 64 : 60);
+	assign min_data_length = (conf_tx_no_gen_crc_reg ? 57 : 53);
 
 	//	count cycles  in each state, but not in TX_PAD
 	//	don't count while disabled (count is important for TX_IFG)

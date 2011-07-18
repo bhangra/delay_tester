@@ -260,12 +260,12 @@ module frame_sender(
 			send_counter			<= send_counter_next;
 			valid_arp 				<= valid_arp_next;
 			// 	set 0 when not sending & waiting CRC gen
-			mac_tx_dvld_out_reg <= 
-				send_state == WAIT_FOR_ACK	||
-				send_state == MAC_DST		||
-				send_state == MAC_SRC		||
-				send_state == ETH_TYPE		||
-				send_state == DATA;
+			mac_tx_dvld_out_reg 	<= 
+				send_state_next == WAIT_FOR_ACK	||
+				send_state_next == MAC_DST		||
+				send_state_next == MAC_SRC		||
+				send_state_next == ETH_TYPE		||
+				send_state_next == DATA;
 
 		end
 	end
