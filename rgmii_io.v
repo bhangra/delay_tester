@@ -18,6 +18,7 @@
 // Additional Comments: 
 //
 //////////////////////////////////////////////////////////////////////////////////
+
 module rgmii_io(
 //	Pad side Signals
 	input			rgmii_rxc,	//from rx_rgmii_clk_int -> rgmii_rxc
@@ -39,9 +40,9 @@ module rgmii_io(
 	output reg	    gmii_rx_dv_reg, // gmii_rx_dv_ibuf registered in IOBs
 	output reg     	gmii_rx_er_reg, // gmii_rx_er_ibuf registered in IOBs
 
-//----------------------------------------------------------------------
+//----------------------------------------------------------------
 //-- Clocks and misc
-//----------------------------------------------------------------------
+//----------------------------------------------------------------
 	output reg    	eth_link_status,
 	output reg [1:0]eth_clock_speed,
 	output reg    	eth_duplex_status,
@@ -57,10 +58,9 @@ module rgmii_io(
 //////////////////////////////////////////////////////////////////////////////
 //http://dora.bk.tsukuba.ac.jp/~takeuchi/index.php?%C5%C5%B5%A4%B2%F3%CF%A9%2FHDL%2FXilinx%20ISE%20%A4%CB%A4%AA%A4%B1%A4%EB%A4%CE%C0%A9%CC%F3%A4%CE%CD%BF%A4%A8%CA%FD	
 //////////////////////////////////////////////////////////////////////////////
-	(* IOB="FORCE" *)wire					rgmii_rx_ctl_ibuf;
+	(* IOB="FORCE" *)wire				rgmii_rx_ctl_ibuf;
 	(* IOB="FORCE" *)wire		[3:0]	rgmii_rxd_ibuf;     // RGMII receiver data input.
 	wire	[3:0]	rgmii_txd_obuf;
-
 
 	reg		[7:0]	rgmii_rxd_ddr;
 	reg				rgmii_rx_dv_ddr;    // Inverted version of the signal.
@@ -91,79 +91,69 @@ module rgmii_io(
 //
 
 //Double Data Rate Input 
-	always @ (posedge rgmii_rxc or posedge reset) //rx_rgmii_clk_int -> rgmii_rxc
+	always @ (posedge rgmii_rxc or posedge reset) //rx_rgmii_clk_int -> rgmii_rxc
 	begin
-		if(reset)
-			begin
-				rgmii_rxd_ddr[3:0]	<= 4'b0;
-				rgmii_rx_dv_ddr		<= 1'b0;
-			end
-		else
-			begin
-				rgmii_rxd_ddr[3:0]	<= rgmii_rxd;		//rgmii_rxd_ibuf
-				rgmii_rx_dv_ddr		<= rgmii_rx_ctl;	//rgmii_rx_ctl_ibuf
-			end
+		if(reset)	begin
+			rgmii_rxd_ddr[3:0]	<= 4'b0;
+			rgmii_rx_dv_ddr		<= 1'b0;
+		end
+		else	begin
+			rgmii_rxd_ddr[3:0]	<= rgmii_rxd;		//rgmii_rxd_ibuf
+			rgmii_rx_dv_ddr		<= rgmii_rx_ctl;	//rgmii_rx_ctl_ibuf
+		end
 	end
 	
-	assign not_rgmii_rxc = ~rgmii_rxc;	//rx_rgmii_clk_int -> rgmii_rxc
+	assign not_rgmii_rxc = ~rgmii_rxc;	//rx_rgmii_clk_int -> rgmii_rxc
 
 	always @ (posedge not_rgmii_rxc or posedge reset)
 	begin
-		if(reset)
-			begin
-				rgmii_rxd_ddr[7:4]	<= 4'b0;
-				rgmii_rx_ctl_ddr	<= 1'b0;
-			end
-		else
-			begin
-				rgmii_rxd_ddr[7:4]	<= rgmii_rxd;		//rgmii_rxd_ibuf
-				rgmii_rx_ctl_ddr		<= rgmii_rx_ctl;	//rgmii_rx_ctl_ibuf
-			end
+		if(reset)	begin
+			rgmii_rxd_ddr[7:4]	<= 4'b0;
+			rgmii_rx_ctl_ddr	<= 1'b0;
+		end
+		else	begin
+			rgmii_rxd_ddr[7:4]	<= rgmii_rxd;		//rgmii_rxd_ibuf
+			rgmii_rx_ctl_ddr	<= rgmii_rx_ctl;	//rgmii_rx_ctl_ibuf
+		end
 	end
 	
 	//DDR signals 
 	always @ (posedge rgmii_rxc or posedge reset)	//rx_rgmii_clk_int
 	begin
-		if(reset)
-			begin
-				rgmii_rxd_reg[3:0]	<= 4'b0;
-				rgmii_rx_dv_reg		<= 1'b0;
-			end
-		else
-			begin
-				rgmii_rxd_reg[3:0]	<= rgmii_rxd_ddr[3:0];
-				rgmii_rx_dv_reg		<=	rgmii_rx_dv_ddr;
-			end
+		if(reset)	begin
+			rgmii_rxd_reg[3:0]	<= 4'b0;
+			rgmii_rx_dv_reg		<= 1'b0;
+		end
+		else	begin
+			rgmii_rxd_reg[3:0]	<= rgmii_rxd_ddr[3:0];
+			rgmii_rx_dv_reg		<= rgmii_rx_dv_ddr;
+		end
 	end
 
 	always @ (posedge not_rgmii_rxc or posedge reset)	//not_rx_rgmii_clk_int
 	begin
-		if(reset)
-			begin
-				rgmii_rxd_reg[7:4]	<= 4'b0;
-				rgmii_rx_ctl_reg		<=	1'b0;
-			end
-		else
-			begin
-				rgmii_rxd_reg[7:4]	<= rgmii_rxd_ddr[7:4];
-				rgmii_rx_ctl_reg		<= rgmii_rx_ctl_ddr;
-			end
+		if(reset)	begin
+			rgmii_rxd_reg[7:4]	<= 4'b0;
+			rgmii_rx_ctl_reg	<=	1'b0;
+		end
+		else	begin
+			rgmii_rxd_reg[7:4]	<= rgmii_rxd_ddr[7:4];
+			rgmii_rx_ctl_reg	<= rgmii_rx_ctl_ddr;
+		end
 	end
 	
 	always @ (posedge rgmii_rxc or posedge reset)	//rx_rgmii_clk_int
 	begin
-		if(reset)
-			begin
-				gmii_rxd_reg[7:0]	<= 8'b0;
-				gmii_rx_dv_reg			<= 1'b0;
-				gmii_rx_er_reg			<= 1'b0;
-			end
-		else
-			begin
-				gmii_rxd_reg[7:0]	<= rgmii_rxd_reg;
-				gmii_rx_dv_reg			<=	rgmii_rx_dv_reg;
-				gmii_rx_er_reg			<= rgmii_rx_ctl_reg ^ rgmii_rx_dv_reg;
-			end
+		if(reset)	begin
+			gmii_rxd_reg[7:0]	<= 8'b0;
+			gmii_rx_dv_reg		<= 1'b0;
+			gmii_rx_er_reg		<= 1'b0;
+		end
+		else	begin
+			gmii_rxd_reg[7:0]	<= rgmii_rxd_reg;
+			gmii_rx_dv_reg		<= rgmii_rx_dv_reg;
+			gmii_rx_er_reg		<= rgmii_rx_ctl_reg ^ rgmii_rx_dv_reg;
+		end
 	end
 //	
 //	TX Interface 
@@ -171,14 +161,14 @@ module rgmii_io(
 
 //TX clock
 	FDDRRSE	gmii_tx_clk_ddr_iob(
-		.Q		(rgmii_txc_obuf),
+		.Q	(rgmii_txc_obuf),
 		.D0	(1'b1),
 		.D1	(1'b0),
 		.C0	(tx_rgmii_clk90_int),
 		.C1	(not_tx_rgmii_clk90_int),
 		.CE	(1'b1),
-		.R		(1'b0),
-		.S		(1'b0)
+		.R	(1'b0),
+		.S	(1'b0)
 	);
 	assign	not_tx_rgmii_clk90_int = ~(tx_rgmii_clk90_int);
 	OBUF drive_rgmii_txc	(.I(rgmii_txc_obuf), .O(rgmii_txc));
@@ -188,77 +178,71 @@ module rgmii_io(
 
 	assign	rgmii_tx_ctl_int = gmii_tx_en_int ^ gmii_tx_er_int;
 	
-	always @	(posedge tx_rgmii_clk_int or posedge reset)
-	begin
-		if (reset)
-			begin
-				gmii_txd_rising		<= 8'b0;
-				gmii_tx_en_rising		<=	1'b0;
-				rgmii_tx_ctl_rising	<=	1'b0;
-			end
-		else
-			begin
-				gmii_txd_rising		<=	gmii_txd_int;
-				gmii_tx_en_rising		<=	gmii_tx_en_int;
-				rgmii_tx_ctl_rising	<=	rgmii_tx_ctl_int;
-			end
+	always @ (posedge tx_rgmii_clk_int or posedge reset) begin
+		if (reset)	begin
+			gmii_txd_rising		<=	8'b0;
+			gmii_tx_en_rising	<=	1'b0;
+			rgmii_tx_ctl_rising	<=	1'b0;
+		end
+		else	begin
+			gmii_txd_rising		<=	gmii_txd_int;
+			gmii_tx_en_rising	<=	gmii_tx_en_int;
+			rgmii_tx_ctl_rising	<=	rgmii_tx_ctl_int;
+		end
 	end
 	
 	assign	not_tx_rgmii_clk_int = ~(tx_rgmii_clk_int);
 	
-	always @ (posedge not_tx_rgmii_clk_int or posedge reset)
-	begin
-		if(reset)
-			begin
-				gmii_txd_falling		<=	4'b0;
-				rgmii_tx_ctl_falling	<=	1'b0;
-			end
-		else
-			begin
-				gmii_txd_falling		<=	gmii_txd_rising[7:4];
-				rgmii_tx_ctl_falling	<=	rgmii_tx_ctl_rising;
-			end
+	always @ (posedge not_tx_rgmii_clk_int or posedge reset) begin
+		if(reset)	begin
+			gmii_txd_falling		<=	4'b0;
+			rgmii_tx_ctl_falling	<=	1'b0;
+		end
+		else	begin
+			gmii_txd_falling		<=	gmii_txd_rising[7:4];
+			rgmii_tx_ctl_falling	<=	rgmii_tx_ctl_rising;
+		end
 	end
 	
 	FDDRRSE	rgmii_txd_out3(
-		.Q		(rgmii_txd_obuf[3]),
+		.Q	(rgmii_txd_obuf[3]),
 		.D0	(gmii_txd_rising[3]),
 		.D1	(gmii_txd_falling[3]),
 		.C0	(tx_rgmii_clk_int),
 		.C1	(not_tx_rgmii_clk_int),
 		.CE	(1'b1),
-		.R		(reset),
-		.S		(1'b0)
+		.R	(reset),
+		.S	(1'b0)
 	);
 	FDDRRSE	rgmii_txd_out2(
-		.Q		(rgmii_txd_obuf[2]),
+		.Q	(rgmii_txd_obuf[2]),
 		.D0	(gmii_txd_rising[2]),
 		.D1	(gmii_txd_falling[2]),
 		.C0	(tx_rgmii_clk_int),
 		.C1	(not_tx_rgmii_clk_int),
 		.CE	(1'b1),
-		.R		(reset),
-		.S		(1'b0)
+		.R	(reset),
+		.S	(1'b0)
 	);
 	FDDRRSE	rgmii_txd_out1(
-		.Q		(rgmii_txd_obuf[1]),
+		.Q	(rgmii_txd_obuf[1]),
 		.D0	(gmii_txd_rising[1]),
 		.D1	(gmii_txd_falling[1]),
 		.C0	(tx_rgmii_clk_int),
 		.C1	(not_tx_rgmii_clk_int),
 		.CE	(1'b1),
-		.R		(reset),
-		.S		(1'b0)
+		.R	(reset),
+		.S	(1'b0)
 	);
 	FDDRRSE	rgmii_txd_out0(
-		.Q		(rgmii_txd_obuf[0]),
+		.Q	(rgmii_txd_obuf[0]),
 		.D0	(gmii_txd_rising[0]),
 		.D1	(gmii_txd_falling[0]),
 		.C0	(tx_rgmii_clk_int),
 		.C1	(not_tx_rgmii_clk_int),
 		.CE	(1'b1),
-		.R		(reset),
-		.S		(1'b0)
+		.R	(reset),
+		.S	(1'b0)
 	);
 	FDDRRSE rgmii_tx_ctl_out(
 		.Q	(rgmii_tx_ctl_obuf),
@@ -281,19 +265,16 @@ module rgmii_io(
 //
 	assign inband_ce = !(gmii_rx_dv_reg || gmii_rx_er_reg);
 
-	always @ (posedge rgmii_rxc or posedge reset)
-	begin
-		if (reset)
-			begin
-				eth_link_status		<= 1'b0;
-				eth_clock_speed[1:0]<= 2'b0;
-				eth_duplex_status	<= 1'b0;
+	always @ (posedge rgmii_rxc or posedge reset)	begin
+		if (reset)	begin
+			eth_link_status			<= 1'b0;
+			eth_clock_speed[1:0]	<= 2'b0;
+			eth_duplex_status		<= 1'b0;
 		end
-		else if (inband_ce)
-			begin
-				eth_link_status		<= gmii_rxd_reg[0];
-				eth_clock_speed[1:0]<= gmii_rxd_reg[2:1];
-				eth_duplex_status	<= gmii_rxd_reg[3];
+		else if (inband_ce)	begin
+			eth_link_status			<= gmii_rxd_reg[0];
+			eth_clock_speed[1:0]	<= gmii_rxd_reg[2:1];	
+			eth_duplex_status		<= gmii_rxd_reg[3];
 		end
 	end
 	

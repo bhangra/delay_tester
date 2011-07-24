@@ -42,6 +42,7 @@ module frame_catcher(
 	reg [3:0]		catch_state_next;
 	reg [13:0]		catch_counter;
 	reg [13:0]		catch_counter_next;
+	reg [7:0]		frame_in	[0:64];
 
 //	Counter
 	always @* begin
