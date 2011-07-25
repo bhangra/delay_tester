@@ -181,7 +181,7 @@ module frame_sender(
 				conf_tx_en_out_reg_next			= 1'b1;
 				conf_tx_jumbo_en_out_reg_next 	= 1'b0;
 				conf_tx_no_gen_crc_out_reg_next	= 1'b0;
-				valid_arp_next[8*(64)-1:8*(64-55)] = SAMPLE_FRAME;	//511 ~ 72 = 440 = 55; 19 -14 = 5
+				valid_arp_next[8*(64)-1:8*(64-(SAMPLE_FRAME_SIZE - 1))] = SAMPLE_FRAME;	//511 ~ 72 = 440 = 55; 19 -14 = 5
 			end
 			RESET: begin
 				mac_tx_data_out_reg             = 8'b00000000; 
@@ -235,7 +235,7 @@ module frame_sender(
 			end
 		  end
 		  DATA: begin
-			if(send_counter == (56-2))
+			if(send_counter == (SAMPLE_FRAME_SIZE - 2))
 				send_state_next = IDOL;
 		  end
 		  RESET: begin
