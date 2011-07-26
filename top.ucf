@@ -1134,7 +1134,7 @@ TIMESPEC "TS_tx_clk_gmii"      = PERIOD "tx_clock_gmii" 8000 ps HIGH 50 %;
 #----------------------------------------------------
 # Flow Control logic reclocking
 
-#TIMESPEC "TS_flow_rx_to_tx" = FROM "flow_rx_to_tx" TO "tx_clock_gmii" 8000 ps DATAPATHONLY;
+TIMESPEC "TS_flow_rx_to_tx" = FROM "flow_rx_to_tx" TO "tx_clock_gmii" 8000 ps DATAPATHONLY;
 
 
 #----------------------------------------------------
@@ -1218,15 +1218,15 @@ INST "BUFGMUX_TXCLK90" LOC = "BUFGMUX3P"  ;
 # Core clock constraints
 ############################################################
 
-#INST "BUFGMUX_CORE_CLK" LOC = "BUFGMUX1P"  ;
+INST "BUFGMUX_CORE_CLK" LOC = "BUFGMUX1P"  ;
 
 # According to Xilinx COnstraint manual, the Xilinx tools will
 # automatically propagate clock constrainst through DCMs.
 # We just need to specify the input clocks (from pads).
 
 # Main system clock (125 MHz or slower)
-#NET "core_clk_int" TNM_NET = "core_clk_int" ;
-#TIMESPEC "TS_core_clk_int" = PERIOD "core_clk_int" 8 ns HIGH 50 %;
+NET "core_clk_int" TNM_NET = "core_clk_int" ;
+TIMESPEC "TS_core_clk_int" = PERIOD "core_clk_int" 8 ns HIGH 50 %;
 
 
 
@@ -1473,7 +1473,7 @@ NET "core_clk"        LOC = "D17" | IOSTANDARD = LVCMOS25 ;
 
 #NET "debug_led"        LOC = "AL5"  | IOSTANDARD = LVCMOS25 ;
 NET "gtx_clk"          LOC = "J17" | IOSTANDARD = LVCMOS25 ;
-#NET "nf2_reset"        LOC = "J4" | IOSTANDARD = LVCMOS25 ;
+NET "nf2_reset"        LOC = "J4" | IOSTANDARD = LVCMOS25 ;
 NET "phy_mdc"          LOC = "AL34"  | IOSTANDARD = LVCMOS25 ;
 NET "phy_mdio"         LOC = "AL33"  | IOSTANDARD = LVCMOS25 ;
 
