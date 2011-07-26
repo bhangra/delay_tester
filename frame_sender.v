@@ -191,17 +191,14 @@ module frame_sender(
 				mac_tx_data_out_reg             = 8'b00000000; 
 			end
 			WAIT_FOR_ACK: begin
-				if(!mac_tx_ack)
-					mac_tx_data_out_reg[7:0]	= valid_arp[8*64-1:8*63];
-				else if(mac_tx_ack) begin
-					valid_arp_next [8*64-1:8*1]		= valid_arp[8*63-1:8*0];
+				if(mac_tx_ack) begin
 					mac_tx_data_out_reg[7:0]	= valid_arp[8*64-1:8*63];
 				end
 			end
 			DATA: begin
 				if(!reset) begin
-					valid_arp_next [8*64-1:8*1]		= valid_arp[8*63-1:8*0];
 					mac_tx_data_out_reg[7:0]	= valid_arp[8*64-1:8*63];
+					valid_arp_next [8*64-1:8*1]		= valid_arp[8*63-1:8*0];
 				end
 			end
 
@@ -239,7 +236,7 @@ module frame_sender(
 			end
 		  end
 		  DATA: begin
-			if(send_counter == (SAMPLE_FRAME_SIZE - 2))
+			if(send_counter == (SAMPLE_FRAME_SIZE - 1))
 				send_state_next = IDOL;
 		  end
 		  RESET: begin
