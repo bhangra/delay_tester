@@ -37,6 +37,12 @@ module sta(
 	reg		mdc_rising, mdc_falling;
 	reg [7:0]	mdc_counter;
 
+	always @(posedge clk)
+		if(reset | (mdc_counter == FALL_COUNT)
+			mdc_counter <= 1;
+		else
+			mdc_counter <= mdc_counter + 1;
+
 	always @(posedge clk) begin
 		mdc_rising	<= (mdc_counter == RISE_COUNT);
 		mdc_falling	<= (mdc_counter == FALL_COUNT);
@@ -51,13 +57,14 @@ module sta(
 
 	reg [31:0] cmd_reg, tri_ctrl;
 
-	always @(posedge clk) 
+	always @(posedge clk or posedge reset) 
 	begin
 		if(reset)
 			cmd_reg <= 'h0;
 		else if((state == RUN)&& mdc_falling)
 			cmd_reg <= {cmd_reg[30:0],1'b0};
 	end
+
 	assign phy_mdio_out = cmd_reg[31];
 	assign phy_mdio_tri = tri_ctrl[31];
 
