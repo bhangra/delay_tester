@@ -23,7 +23,7 @@ module top_tbw;
     reg nf2_reset = 1'b0;
     reg gtx_clk = 1'b0;
     wire phy_mdc;
-    reg phy_mdio$inout$reg = 1'bZ;
+    reg phy_mdio$inout$reg = 1'b0;
     wire phy_mdio = phy_mdio$inout$reg;
     reg rgmii_0_rx_ctl = 1'b0;
     reg rgmii_0_rxc = 1'b0;
