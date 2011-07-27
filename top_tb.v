@@ -74,9 +74,9 @@ module top_tbw;
 
     initial begin
         // -------------  Current Time:  100ns
-	#80;
+	#8;
 		nf2_reset = 1'b1;
-	#88;
+	#16;
 		nf2_reset = 1'b0;
 
 		// -------------------------------------

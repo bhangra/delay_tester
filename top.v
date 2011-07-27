@@ -15,7 +15,11 @@
 //
 // Revision: 
 // Revision 0.01 - File Created
+//
 // Additional Comments: 
+// Large portion of codes are from:
+// nf2_top.v module from,
+// NetFPGA project
 //
 //////////////////////////////////////////////////////////////////////////////////
 module top(

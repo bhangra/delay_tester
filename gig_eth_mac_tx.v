@@ -15,7 +15,7 @@
 //
 // Revision: 
 // Revision 0.01 - File Created
-// Additional Comments: 
+//  
 // Gigabit Ethernet MAC: TX logic
 // Originally created by Erik Rubow
 // 

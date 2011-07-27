@@ -15,7 +15,11 @@
 //
 // Revision: 
 // Revision 0.01 - File Created
-// Additional Comments: 
+//
+// Gigabit Ethernet MAC: RX logic
+// Originally created by Erik Rubow
+// 
+// modified by bhangra
 //
 //////////////////////////////////////////////////////////////////////////////////
 module gig_eth_mac_rx
