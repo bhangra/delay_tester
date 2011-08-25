@@ -225,6 +225,9 @@ module gig_eth_mac_tx
 				if(tx_counter == 11)
 					tx_state_next = TX_READY;
 			end
+			default: begin
+				tx_state_next = TX_IFG;
+			end
 		 endcase
 	 	end
 	 end

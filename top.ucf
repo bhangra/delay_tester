@@ -1470,6 +1470,27 @@ NET "core_clk"        LOC = "D17" | IOSTANDARD = LVCMOS25 ;
 #NET "debug_data<7>"  LOC = "AL12" | IOSTANDARD = LVCMOS25 ;
 #NET "debug_data<8>"  LOC = "AM13" | IOSTANDARD = LVCMOS25 ;
 #NET "debug_data<9>"  LOC = "AL13" | IOSTANDARD = LVCMOS25 ;
+NET "debug_data<0>"     LOC = "AL11"| IOSTANDARD = LVCMOS25 ;
+NET "debug_data<1>"     LOC = "AM11"| IOSTANDARD = LVCMOS25 ;
+NET "debug_data<2>"     LOC = "AG10"| IOSTANDARD = LVCMOS25 ;
+NET "debug_data<3>"     LOC = "AJ15"| IOSTANDARD = LVCMOS25 ;
+NET "debug_data<4>"     LOC = "AH15"| IOSTANDARD = LVCMOS25 ;
+NET "debug_data<5>"     LOC = "AM14"| IOSTANDARD = LVCMOS25 ;
+NET "debug_data<6>"     LOC = "AJ14"| IOSTANDARD = LVCMOS25 ;
+NET "debug_data<7>"     LOC = "AH14"| IOSTANDARD = LVCMOS25 ;
+NET "debug_data<8>"     LOC = "AG14"| IOSTANDARD = LVCMOS25 ;
+NET "debug_data<9>"     LOC = "AF14"| IOSTANDARD = LVCMOS25 ;
+NET "debug_data<10>"     LOC = "AL12"| IOSTANDARD = LVCMOS25 ;
+NET "debug_data<11>"     LOC = "AH13"| IOSTANDARD = LVCMOS25 ;
+NET "debug_data<12>"     LOC = "AM13"| IOSTANDARD = LVCMOS25 ;
+NET "debug_data<13>"     LOC = "AL13"| IOSTANDARD = LVCMOS25 ;
+NET "debug_data<14>"     LOC = "AK13"| IOSTANDARD = LVCMOS25 ;
+NET "debug_data<15>"     LOC = "AJ13"| IOSTANDARD = LVCMOS25 ;
+NET "debug_data<16>"     LOC = "AK11"| IOSTANDARD = LVCMOS25 ;
+NET "debug_data<17>"     LOC = "AJ11"| IOSTANDARD = LVCMOS25 ;
+NET "debug_data<18>"     LOC = "AG11"| IOSTANDARD = LVCMOS25 ;
+NET "debug_data<19>"     LOC = "AJ12"| IOSTANDARD = LVCMOS25 ;
+
 
 #NET "debug_led"        LOC = "AL5"  | IOSTANDARD = LVCMOS25 ;
 NET "gtx_clk"          LOC = "J17" | IOSTANDARD = LVCMOS25 ;
@@ -1484,7 +1505,10 @@ NET "rgmii_0_rxd<1>"  LOC = "AM26" | IOSTANDARD = LVCMOS25 ;
 NET "rgmii_0_rxd<2>"  LOC = "AJ26" | IOSTANDARD = LVCMOS25 ;
 NET "rgmii_0_rxd<3>"  LOC = "AK26" | IOSTANDARD = LVCMOS25 ;
 NET "rgmii_0_tx_ctl"  LOC = "AG25" | IOSTANDARD = LVCMOS25 ;
-NET "rgmii_0_txc"     LOC = "AF25" | IOSTANDARD = LVCMOS25 ;
+#AG25
+#AG 11 & AJ12 are used for debugging
+NET "rgmii_0_txc"     LOC = "AF25" | IOSTANDARD = LVCMOS25 ; 
+#AF25
 NET "rgmii_0_txd<0>"  LOC = "AL28" | IOSTANDARD = LVCMOS25 ;
 NET "rgmii_0_txd<1>"  LOC = "AM28" | IOSTANDARD = LVCMOS25 ;
 NET "rgmii_0_txd<2>"  LOC = "AE24" | IOSTANDARD = LVCMOS25 ;

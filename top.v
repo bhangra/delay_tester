@@ -47,8 +47,8 @@ module top(
 	input	[3:0]		rgmii_1_rxd,
 	output				rgmii_1_tx_ctl,
 	output				rgmii_1_txc,
-	output	[3:0]		rgmii_1_txd
-	
+	output	[3:0]		rgmii_1_txd,
+	output	[19:0]		debug_data
 /*	input				rgmii_2_rx_ctl,
 	input				rgmii_2_rxc,
 	input	[3:0]		rgmii_2_rxd,
@@ -119,7 +119,6 @@ module top(
 	wire	reset;
 	wire	core_locked;
 	wire	disable_reset;
-
 //	gtx_clk Clock Management
 //	125MHz TX reference clock for the MACs
 
@@ -148,7 +147,7 @@ module top(
 		.STATUS(),
 		.LOCKED()
 	);
-	
+// tx_rgmii_clk_int @ 125MHz	
 	BUFGMUX BUFGMUX_TXCLK(
 		.O(tx_rgmii_clk_int),
 		.I0(tx_clk0),
@@ -162,6 +161,9 @@ module top(
 		.I0(tx_clk90),
 		.S(1'b0)
 	);
+ //synthesis attribute keep of tx_rgmii_clk_int    is "true";
+//synthesis attribute keep of tx_rgmii_clk90_int    is "true";
+
 /*	
    IBUFG inst_rgmii_0_rxc_ibuf  (.I(rgmii_0_rxc),  .O(rgmii_0_rxc_ibuf));
    IBUFG inst_rgmii_1_rxc_ibuf  (.I(rgmii_1_rxc),  .O(rgmii_1_rxc_ibuf));
@@ -313,7 +315,6 @@ module top(
 		.I0(core_clk0),
 		.S(1'b0)
 	);
-	
 	//for debuggin purpose
 	reg	[7:0]	rgmii_0_reg;
 	reg	[7:0]	rgmii_1_reg;
@@ -358,10 +359,20 @@ module top(
 		.reset					(reset)
 
 	);
-always @(posedge core_clk)
-begin
-	rgmii_0_reg <= gmii_0_rxd_reg;
-	rgmii_1_reg <= gmii_1_rxd_reg;
+	reg	[5:0]	debug_count;
+	reg	[5:0]	debug_count_next;
+	reg [19:0]	debug_data_out;
+	assign debug_data = debug_data_out;
+always @(posedge tx_rgmii_clk90_int) begin
+	if(gmii_0_txd_int)
+		debug_data_out = 1;
+	else if(gmii_0_txd_int == 0)
+		debug_data_out = 0;
+end
+
+always @(posedge core_clk_int) begin
+	rgmii_0_reg = gmii_0_rxd_reg;
+	rgmii_1_reg = gmii_1_rxd_reg;
 end
 
 	assign reset = (nf2_reset && !disable_reset) || !core_locked;
