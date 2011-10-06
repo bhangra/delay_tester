@@ -1505,10 +1505,8 @@ NET "rgmii_0_rxd<1>"  LOC = "AM26" | IOSTANDARD = LVCMOS25 ;
 NET "rgmii_0_rxd<2>"  LOC = "AJ26" | IOSTANDARD = LVCMOS25 ;
 NET "rgmii_0_rxd<3>"  LOC = "AK26" | IOSTANDARD = LVCMOS25 ;
 NET "rgmii_0_tx_ctl"  LOC = "AG25" | IOSTANDARD = LVCMOS25 ;
-#AG25
 #AG 11 & AJ12 are used for debugging
 NET "rgmii_0_txc"     LOC = "AF25" | IOSTANDARD = LVCMOS25 ; 
-#AF25
 NET "rgmii_0_txd<0>"  LOC = "AL28" | IOSTANDARD = LVCMOS25 ;
 NET "rgmii_0_txd<1>"  LOC = "AM28" | IOSTANDARD = LVCMOS25 ;
 NET "rgmii_0_txd<2>"  LOC = "AE24" | IOSTANDARD = LVCMOS25 ;

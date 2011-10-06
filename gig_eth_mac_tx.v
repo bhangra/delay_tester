@@ -114,7 +114,7 @@ module gig_eth_mac_tx
 	assign gmii_txen_out_reg_next	= tx_state == TX_PREAMBLE || tx_state == TX_DATA || tx_state == TX_PAD || tx_state == TX_CRC || tx_state == TX_CORRUPT_FRAME;
 	assign gmii_txer_out_reg_next	= tx_state == TX_CORRUPT_FRAME;
 
-	always @* begin
+	always @(posedge tx_clk) begin
 	 if(tx_state 		== TX_PREAMBLE && tx_counter == 8)
 	 	gmii_txd_out_reg_next = 8'b11010101;
 	 else if(tx_state	== TX_PREAMBLE)
@@ -133,7 +133,7 @@ module gig_eth_mac_tx
 	assign tx_crc_rd	= tx_state == TX_CRC;
 
 	//update configuration betwwen frames
-	always @* begin
+	always @(posedge tx_clk) begin
 	 if(tx_state == TX_READY || tx_state == TX_IFG) begin
 	 	conf_tx_en_reg_next			= conf_tx_en;
 		conf_tx_jumbo_en_reg_next	= conf_tx_jumbo_en;
@@ -146,7 +146,7 @@ module gig_eth_mac_tx
 	 end
 	end
 
-	always @* begin
+	always @(posedge tx_clk) begin
 	 case ({conf_tx_jumbo_en_reg, conf_tx_no_gen_crc_reg})
 	 	2'b00:	max_data_length	= MAX_FRAME_SIZE_STANDARD - 4;
 		2'b01:	max_data_length = MAX_FRAME_SIZE_STANDARD;
@@ -159,7 +159,7 @@ module gig_eth_mac_tx
 
 	//	count cycles  in each state, but not in TX_PAD
 	//	don't count while disabled (count is important for TX_IFG)
-	always @* begin
+	always @(posedge tx_clk) begin
 	 if(!conf_tx_en_reg || (tx_state_next != tx_state && tx_state_next != TX_PAD))
 	 	tx_counter_next = 1;
 	 else
@@ -167,7 +167,7 @@ module gig_eth_mac_tx
 	end
 
 	//	State Machine
-	always @* begin
+	always @(posedge tx_clk) begin
 	 if(!conf_tx_en_reg)
 	 	tx_state_next = TX_IFG;
 	 else begin
