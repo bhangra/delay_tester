@@ -93,6 +93,8 @@ module gig_eth_mac_tx
 	wire		tx_crc_rd;
 	wire [7:0]	tx_crc_val;
 
+	wire		not_tx_clk;
+
 	//	CRC module
 	CRC_gen	tx_crc_gen(
 		.Reset		(reset),
@@ -232,7 +234,10 @@ module gig_eth_mac_tx
 	 	end
 	 end
 	end
-	always @(posedge tx_clk or posedge reset) begin
+	
+	assign not_tx_clk = ~(tx_clk);
+	
+	always @(posedge not_tx_clk or posedge reset) begin
 		if (reset) begin
 			mac_tx_data_in_reg		<= 8'h00;
 			mac_tx_dvld_in_reg		<= 1'b0;

@@ -198,7 +198,7 @@ module rgmii_io(
 			gmii_txd_falling		<=	4'b0;
 			rgmii_tx_ctl_falling	<=	1'b0;
 		end
-		else	begin
+		else begin
 			gmii_txd_falling		<=	gmii_txd_rising[7:4];
 			rgmii_tx_ctl_falling	<=	rgmii_tx_ctl_rising;
 		end
