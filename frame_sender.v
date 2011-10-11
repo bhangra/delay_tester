@@ -121,7 +121,7 @@ module frame_sender(
 	assign mac_tx_dvld		= mac_tx_dvld_out_reg;
 
 //	Send MAC
-	always @* begin
+	always @(posedge tx_clk) begin
 /*	  if(send_state	== MAC_DST)
 	    case(send_counter)
 			1:	mac_tx_data_out_reg_next = MAC_dst_addr[6*8-1:5*8];
@@ -212,7 +212,7 @@ module frame_sender(
 */
 
 //	State Machine & Counter
-	always @* begin
+	always @(posedge tx_clk or posedge reset) begin
 	  if (reset) begin
 		send_counter	= 1;
 		send_state_next	= RESET;
