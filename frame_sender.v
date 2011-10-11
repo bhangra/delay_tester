@@ -82,18 +82,18 @@ module frame_sender(
 	localparam RESET			= 4'hf;
 	
 //	Wires & Regs
-	reg		conf_tx_en_out_reg;
-	reg		conf_tx_en_out_reg_next;
-	reg		conf_tx_jumbo_en_out_reg;
-	reg		conf_tx_jumbo_en_out_reg_next;
-	reg		conf_tx_no_gen_crc_out_reg;
-	reg		conf_tx_no_gen_crc_out_reg_next;
+	reg			conf_tx_en_out_reg;
+	reg			conf_tx_en_out_reg_next;
+	reg			conf_tx_jumbo_en_out_reg;
+	reg			conf_tx_jumbo_en_out_reg_next;
+	reg			conf_tx_no_gen_crc_out_reg;
+	reg			conf_tx_no_gen_crc_out_reg_next;
 
 	reg [7:0]	mac_tx_data_out_reg;
-	reg		mac_tx_dvld_out_reg;
-	wire	mac_tx_dvld_out_reg_next;
-	reg		mac_tx_ack_in_reg;
-	
+	reg			mac_tx_dvld_out_reg;
+	wire		mac_tx_dvld_out_reg_next;
+	reg			mac_tx_ack_in_reg;
+	wire		not_tx_clk;
 
 	reg [3:0]	send_state;
 	reg [3:0]	send_state_next;
@@ -252,8 +252,10 @@ module frame_sender(
 		endcase
 	end
 
+	
+
 	//	Sequential Logic
-	always @(posedge tx_clk or posedge reset) begin
+	always @(posedge not_tx_clk or posedge reset) begin
 		if (reset) begin
 			conf_tx_en_out_reg		<= 1'b0;
 			conf_tx_jumbo_en_out_reg	<= 1'b0;
