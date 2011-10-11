@@ -252,7 +252,7 @@ module frame_sender(
 		endcase
 	end
 
-	
+	assign not_tx_clk = ~(tx_clk);
 
 	//	Sequential Logic
 	always @(posedge not_tx_clk or posedge reset) begin
