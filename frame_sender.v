@@ -98,6 +98,7 @@ module frame_sender(
 	reg [3:0]	send_state;
 	reg [3:0]	send_state_next;
 	reg [30:0]	send_counter;
+	reg [30:0]	send_counter_next;
 
 	//	MAC Registers
 	//	Destination MAC Addr
@@ -221,33 +222,36 @@ module frame_sender(
 		case(send_state)
 		  IDOL: begin
 			if(send_counter == 100) begin
-				send_state_next = GEN_VALID_FRAME;
-				send_counter 	= 1;
-			end
+				send_state_next 	= GEN_VALID_FRAME;
+				send_counter_next 	= 1;
+			end else
+				send_counter_next	= send_counter + 1;
 		  end
 		  GEN_VALID_FRAME: begin
-				send_state_next = WAIT_FOR_ACK;
-				send_counter = 1;
-		  end
+				send_state_next 	= WAIT_FOR_ACK;
+				send_counter_next 	= 1;
+		  end 
 		  WAIT_FOR_ACK: begin
 			if (mac_tx_ack) begin
-				send_state_next = DATA;
-				send_counter	= 1;
-			end
+				send_state_next 	= DATA;
+				send_counter_next	= 1;
+			end else 
+				send_counter_next	= send_counter + 1;
 		  end
 		  DATA: begin
 			if(send_counter == (SAMPLE_FRAME_SIZE - 1)) begin
-				send_state_next = IDOL;
-				send_counter	= 1;
-			end
+				send_state_next 	= IDOL;
+				send_counter_next	= 1;
+			end else
+				send_counter_next	= send_counter + 1;
 		  end
 		  RESET: begin
 			send_state_next = IDOL;
-			send_counter	= 1;
+			send_counter_next	= 1;
 		  end
 		  default: begin
 			send_state_next = IDOL;
-			send_counter	= 1;
+			send_counter_next	= 1;
 		  end
 		endcase
 	end
@@ -262,6 +266,7 @@ module frame_sender(
 			conf_tx_no_gen_crc_out_reg	<= 1'b0;
 			mac_tx_dvld_out_reg		<= 1'b0;
 			send_state			<= RESET;
+			send_counter		<= send_counter_next;
 		end
 		else begin
 			conf_tx_en_out_reg		<= conf_tx_en_out_reg_next;
@@ -269,6 +274,7 @@ module frame_sender(
 			conf_tx_no_gen_crc_out_reg<= conf_tx_no_gen_crc_out_reg_next;
 			mac_tx_ack_in_reg		<= mac_tx_ack;
 			send_state				<= send_state_next;
+			send_counter			<= send_counter_next;
 			// 	set 0 when not sending & waiting CRC gen
 			mac_tx_dvld_out_reg 	<= 
 				send_state_next == WAIT_FOR_ACK	||
