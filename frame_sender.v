@@ -93,7 +93,6 @@ module frame_sender(
 	reg			mac_tx_dvld_out_reg;
 	wire		mac_tx_dvld_out_reg_next;
 	reg			mac_tx_ack_in_reg;
-	wire		not_tx_clk;
 
 	reg [3:0]	send_state;
 	reg [3:0]	send_state_next;
@@ -177,16 +176,15 @@ module frame_sender(
 				conf_tx_en_out_reg_next			= 1'b1;
 				conf_tx_jumbo_en_out_reg_next 	= 1'b0;
 				conf_tx_no_gen_crc_out_reg_next	= 1'b0;
-				valid_arp[8*(64)-1:8*(64-(SAMPLE_FRAME_SIZE - 1))] = SAMPLE_FRAME;	//511 ~ 72 = 440 = 55; 19 -14 = 5
+				valid_arp[(8*64)-1:8*(64-(SAMPLE_FRAME_SIZE - 1))] = SAMPLE_FRAME;	//511 ~ 72 = 440 = 55; 19 -14 = 5
 			end
 			RESET: begin
 				mac_tx_data_out_reg             = 8'b00000000; 
 			end
 			WAIT_FOR_ACK: begin
-				if(mac_tx_ack) begin
-				mac_tx_data_out_reg	= valid_arp[8*64-1:8*63];
-						valid_arp			= {valid_arp[8*63-1:0], 8'd0};
-				end
+				mac_tx_data_out_reg	= valid_arp[(8*64)-1:8*63];
+				if(mac_tx_ack)
+						valid_arp	= {valid_arp[(8*63)-1:8*0], 8'd0};
 			end
 			DATA: begin
 				if(!reset) begin
@@ -215,7 +213,7 @@ module frame_sender(
 //	State Machine & Counter
 	always @(posedge tx_clk or posedge reset) begin
 	  if (reset) begin
-		send_counter	= 1;
+		send_counter_next	= 1;
 		send_state_next	= RESET;
 	  end
 	  else
@@ -256,17 +254,16 @@ module frame_sender(
 		endcase
 	end
 
-	assign not_tx_clk = ~(tx_clk);
 
 	//	Sequential Logic
-	always @(posedge not_tx_clk or posedge reset) begin
+	always @(posedge tx_clk or posedge reset) begin
 		if (reset) begin
 			conf_tx_en_out_reg		<= 1'b0;
 			conf_tx_jumbo_en_out_reg	<= 1'b0;
 			conf_tx_no_gen_crc_out_reg	<= 1'b0;
 			mac_tx_dvld_out_reg		<= 1'b0;
 			send_state			<= RESET;
-			send_counter		<= send_counter_next;
+			send_counter		<= 32'd0;
 		end
 		else begin
 			conf_tx_en_out_reg		<= conf_tx_en_out_reg_next;
@@ -285,4 +282,17 @@ module frame_sender(
 
 		end
 	end
+/*
+	always @(posedge tx_clk or posedge reset) begin
+		if(reset)
+			mac_tx_dvld_out_reg <= 1'b0;
+		else
+			mac_tx_dvld_out_reg <= 
+                send_state_next == WAIT_FOR_ACK ||
+                send_state_next == MAC_DST      ||
+                send_state_next == MAC_SRC      ||
+                send_state_next == ETH_TYPE     ||
+                send_state_next == DATA;
+	end
+*/
 endmodule

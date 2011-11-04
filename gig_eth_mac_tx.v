@@ -85,6 +85,7 @@ module gig_eth_mac_tx
 	reg [3:0]	tx_state_next;
 	reg [13:0]	tx_counter;
 	reg [13:0]	tx_counter_next;
+	reg			state_change;
 	reg [13:0]	max_data_length;
 	wire [13:0]	min_data_length;
 
@@ -92,8 +93,6 @@ module gig_eth_mac_tx
 	wire		tx_crc_en;
 	wire		tx_crc_rd;
 	wire [7:0]	tx_crc_val;
-
-	wire		not_tx_clk;
 
 	//	CRC module
 	CRC_gen	tx_crc_gen(
@@ -159,14 +158,14 @@ module gig_eth_mac_tx
 
 	assign min_data_length = (conf_tx_no_gen_crc_reg ? 57 : 53);
 
-	//	count cycles  in each state, but not in TX_PAD
-	//	don't count while disabled (count is important for TX_IFG)
-	always @(posedge tx_clk) begin
-	 if(!conf_tx_en_reg || (tx_state_next != tx_state && tx_state_next != TX_PAD))
-	 	tx_counter_next = 1;
-	 else
-	 	tx_counter_next = tx_counter +1;
-	end
+    //  count cycles  in each state, but not in TX_PAD
+	//  don't count while disabled (count is important for TX_IFG)
+    always @(negedge tx_clk) begin
+    if(!conf_tx_en_reg || state_change == 1 /*(tx_state_next != tx_state && tx_state_next != TX_PAD)*/)
+        tx_counter_next = 1;
+    else
+        tx_counter_next = tx_counter + 1;
+    end
 
 	//	State Machine
 	always @(posedge tx_clk) begin
@@ -190,10 +189,10 @@ module gig_eth_mac_tx
 					tx_state_next = TX_DATA;
 			end
 			TX_DATA: begin
-				if(tx_counter > max_data_length)
+				if(tx_counter > max_data_length) 
 					tx_state_next = TX_CORRUPT_FRAME;
 				else if(!mac_tx_dvld) begin
-					if(tx_counter < min_data_length)
+					if(tx_counter < min_data_length) 
 						tx_state_next = TX_PAD;
 					else if(conf_tx_no_gen_crc_reg)
 						tx_state_next = TX_IFG;
@@ -210,7 +209,7 @@ module gig_eth_mac_tx
 				end
 			end
 			TX_CRC: begin
-				if(tx_counter == 4)
+				if(tx_counter == 3)
 					tx_state_next = TX_IFG;
 			end
 			TX_CORRUPT_FRAME: begin
@@ -224,7 +223,7 @@ module gig_eth_mac_tx
 					tx_state_next = TX_IFG;
 			end
 			TX_IFG: begin
-				if(tx_counter == 11)
+				if(tx_counter == 11) 
 					tx_state_next = TX_READY;
 			end
 			default: begin
@@ -232,12 +231,14 @@ module gig_eth_mac_tx
 			end
 		 endcase
 	 	end
+		if((tx_state_next != tx_state) && (tx_state_next != TX_PAD))
+			state_change = 1;
+		else
+			state_change = 0;
 	 end
 	end
-	
-	assign not_tx_clk = ~(tx_clk);
-	
-	always @(posedge not_tx_clk or posedge reset) begin
+
+	always @(posedge tx_clk or posedge reset) begin
 		if (reset) begin
 			mac_tx_data_in_reg		<= 8'h00;
 			mac_tx_dvld_in_reg		<= 1'b0;
@@ -265,5 +266,5 @@ module gig_eth_mac_tx
 			tx_counter				<= tx_counter_next;
 		end
 	end
-					
+
 endmodule
