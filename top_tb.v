@@ -41,18 +41,27 @@ module top_tbw;
     parameter PERIOD = 8;
     parameter real DUTY_CYCLE = 0.5;
     parameter OFFSET = 4;
-
+	parameter NETWORK_DELAY = 100;
     initial    // Clock process for core_clk
     begin
         #OFFSET;
         forever
         begin
             core_clk = 1'b0;gtx_clk = 1'b0;
-            #(PERIOD-(PERIOD*DUTY_CYCLE)) core_clk = 1'b1; gtx_clk = 1'b1;
+			rgmii_1_rxc 	= rgmii_0_txc;
+			rgmii_1_rx_ctl 	= rgmii_0_tx_ctl;
+			rgmii_1_rxd 	= rgmii_0_txd;
+            #(PERIOD-(PERIOD*DUTY_CYCLE)) 
+			core_clk = 1'b1; gtx_clk = 1'b1;
+			rgmii_1_rxc 	= rgmii_0_txc;
+			rgmii_1_rx_ctl 	= rgmii_0_tx_ctl;
+			rgmii_1_rxd 	= rgmii_0_txd;
             #(PERIOD*DUTY_CYCLE);
         end
     end
-
+//	assign #NETWORK_DELAY rgmii_1_rxc 		= rgmii_0_txc;
+//	assign #NETWORK_DELAY rgmii_1_rx_ctl 	= rgmii_0_tx_ctl;
+//	assign #NETWORK_DELAY rgmii_1_rxd		= rgmii_0_txd;
     top UUT (
         .core_clk(core_clk),
         .nf2_reset(nf2_reset),

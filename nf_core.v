@@ -77,7 +77,7 @@ module nf_core(
 	gig_eth_mac gig_eth_mac_0(
 	//	Reset, Clock
 		.reset				(reset),
-		.rx_clk				(rx_rgmii_clk_int),
+		.rx_clk				(rx_rgmii_0_clk_int),
 		.tx_clk				(tx_rgmii_clk_int),
 
 	//	Configuration 
@@ -121,7 +121,7 @@ module nf_core(
 	wire			rx_mac_en_1;
 	wire			tx_mac_en_1;
 
-	wire			gmac_rx_data_1;
+	wire	[7:0]	gmac_rx_data_1;
 	wire			gmac_rx_dvld_1;
 	wire			gmac_rx_goodframe_1;
 	wire			gmac_rx_badframe_1;
@@ -134,7 +134,7 @@ module nf_core(
 
 	gig_eth_mac gig_eth_mac_1(
 		.reset				(reset),
-		.rx_clk				(rx_rgmii_clk_int),
+		.rx_clk				(rx_rgmii_1_clk_int),
 		.tx_clk				(tx_rgmii_clk_int),
 
 		.conf_rx_en			(rx_mac_en_1),
@@ -163,19 +163,29 @@ module nf_core(
 		.gmii_tx_er			(gmii_1_tx_er_int),
 
 		.gmii_col			(gmii_1_col_int),
-		.gmii_crs			(gmii_1_rx_dv_reg)
+		.gmii_crs			(gmii_1_crs_int)
 	);
 
 	frame_sender	frame_sender(
 		.reset				(reset),
 		.tx_clk				(tx_rgmii_clk_int),
 		.conf_tx_en			(tx_mac_en_0),
-		.conf_tx_jumbo_en	(enable_jumbo_rx_0),
+		.conf_tx_jumbo_en	(enable_jumbo_tx_0),
 		.conf_tx_no_gen_crc	(disable_crc_gen_0),
 		.mac_tx_data		(gmac_tx_data_0),
 		.mac_tx_dvld		(gmac_tx_dvld_0),
 		.mac_tx_ack			(gmac_tx_ack_0)
 	);
-
-
+	
+	frame_catcher	frame_catcher(
+		.reset				(reset),
+		.rx_clk				(rx_rgmii_1_clk_int),
+		.conf_rx_en			(rx_mac_en_1),
+		.conf_rx_jumbo_en	(enable_jumbo_rx_1),
+		.conf_rx_no_chk_crc	(disable_crc_check_1),
+		.mac_rx_data		(gmac_rx_data_1),
+		.mac_rx_dvld		(gmac_rx_dvld_1),
+		.mac_rx_goodframe	(gmac_rx_goodframe_1),
+		.mac_rx_badframe	(gmac_rx_badframe_1)
+	);
 endmodule

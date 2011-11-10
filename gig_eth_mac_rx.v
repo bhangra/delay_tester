@@ -112,7 +112,7 @@ module gig_eth_mac_rx
 	assign rx_delay_data_next[5*8-1:4*8] = rx_delay_data[6*8-1:5*8];
 	assign rx_delay_data_next[6*8-1:5*8] = gmii_rxd_in_reg;
 	
-	assign rx_delay_dvld_next[0] = (!conf_rx_no_chk_crc && rx_state_next != RX_FRAME) ? 0 : rx_delay_dvld[1];
+	assign rx_delay_dvld_next[0] = (!conf_rx_no_chk_crc && rx_state != RX_FRAME) ? 0 : rx_delay_dvld[1];
 	assign rx_delay_dvld_next[1] = rx_delay_dvld[2];
 	assign rx_delay_dvld_next[2] = rx_delay_dvld[3];
 	assign rx_delay_dvld_next[3] = rx_delay_dvld[4];
@@ -213,7 +213,8 @@ module gig_eth_mac_rx
 	 	gmii_rxd_in_reg			<= 8'h00;
 		gmii_rxdv_in_reg		<= 1'b0;
 		gmii_rxer_in_reg		<= 1'b0;
-		rx_state				<= 1'b1;
+		conf_rx_en_reg			<= 1'b0;
+		conf_rx_no_chk_crc_reg	<= 1'b1;
 		conf_rx_jumbo_en_reg	<= 1'b0;
 		rx_state				<= RX_READY;
 		rx_counter				<= 0;

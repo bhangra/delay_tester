@@ -80,8 +80,9 @@ gig_eth_mac_rx#(
 	.conf_rx_no_chk_crc (conf_rx_no_chk_crc),
 	.mac_rx_data		(mac_rx_data),
 	.mac_rx_dvld		(mac_rx_dvld),
-	.mac_rx_goodframe	(mac_rx_badframe),
-	.gmii_rxd			(gmii__rx_data),
+	.mac_rx_goodframe	(mac_rx_goodframe),
+	.mac_rx_badframe	(mac_rx_badframe),
+	.gmii_rxd			(gmii_rx_data),
 	.gmii_rxdv			(gmii_rx_dvld),
 	.gmii_rxer			(gmii_rx_er)
 );

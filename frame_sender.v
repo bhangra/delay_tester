@@ -23,7 +23,7 @@ module frame_sender(
 	input	wire		reset,
 	input	wire		tx_clk,
 
-	//	Configuration pins
+	//	Configuration Pins
 	output	wire		conf_tx_en,
 	output	wire		conf_tx_jumbo_en,
 	output	wire		conf_tx_no_gen_crc,

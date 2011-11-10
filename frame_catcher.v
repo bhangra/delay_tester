@@ -19,14 +19,17 @@
 //
 //////////////////////////////////////////////////////////////////////////////////
 module frame_catcher(
+	//	Reset, TX Clock
 	input	wire		reset,
 	input	wire		rx_clk,
 
+	//	Configuration Pins
 	output	wire		conf_rx_en,
 	output	wire		conf_rx_no_chk_crc,
 	output	wire		conf_rx_jumbo_en,
 
-	input	wire	[7:0]	mac_rx_data,
+	//	MAC Interface
+	input	wire [7:0]	mac_rx_data,
 	input	wire		mac_rx_dvld,
 	input	wire		mac_rx_goodframe,
 	input	wire		mac_rx_badframe	
@@ -38,14 +41,34 @@ module frame_catcher(
 	localparam CHECK	= 4'd2;
 	localparam RESET	= 4'd15;
 
+//	Wires & Regs
+	reg				conf_rx_en_out_reg;
+	reg				conf_rx_en_out_reg_next;
+	reg				conf_rx_jumbo_en_out_reg;
+	reg				conf_rx_jumbo_en_out_reg_next;
+	reg				conf_rx_no_chk_crc_out_reg;
+	reg				conf_rx_no_chk_crc_out_reg_next;
+
+
 	reg [3:0]		catch_state;
 	reg [3:0]		catch_state_next;
 	reg [13:0]		catch_counter;
 	reg [13:0]		catch_counter_next;
 	reg [7:0]		frame_in	[0:64];
 
+//	Assigning Wires
+	assign conf_rx_en 			= conf_rx_en_out_reg;
+	assign conf_rx_jumbo_en 	= conf_rx_jumbo_en_out_reg;
+	assign conf_rx_no_chk_crc 	= conf_rx_no_chk_crc_out_reg;
+
+//	Catch MAC 
+	always @(posedge rx_clk) begin
+		conf_rx_en_out_reg_next 		= 1'b1;
+		conf_rx_jumbo_en_out_reg_next 	= 1'b0;
+		conf_rx_no_chk_crc_out_reg_next = 1'b0;
+	end
 //	Counter
-	always @* begin
+	always @(posedge rx_clk) begin
 		if(catch_state != catch_state_next)
 			catch_counter_next = 1;
 		else
@@ -53,18 +76,19 @@ module frame_catcher(
 	end
 
 //	Frame Catcher
-	always @* begin
+/*	always @(posedge rx_clk) begin
 		case (catch_state) begin
-		
+			
 		endcase
-
+	end
+*/
 //	State Machine
-	always @* begin
+	always @(posedge rx_clk) begin
 	  if (reset) begin
 		catch_state_next = RESET;
 	  end
 	  else
-		case (catch_state) begin
+		case (catch_state) 
 			IDOL: begin
 			  if(mac_rx_dvld)
 				catch_state_next = DATA;	
@@ -85,11 +109,18 @@ module frame_catcher(
 //	Sequential Logic
 	always @(posedge rx_clk or posedge reset) begin
 		if (reset) begin
-			catch_state	<= RESET;
-			catch_counter	<= 13'd0;
+			conf_rx_en_out_reg			<= 1'b0;
+			conf_rx_jumbo_en_out_reg 	<= 1'b0;
+			conf_rx_no_chk_crc_out_reg	<= 1'b0;
+			catch_state					<= RESET;
+			catch_counter 				<= 13'd0;
 		end
 		else begin
-			catch_state	<= catch_state_next;
-			catch_counter 	<= catch_counter_next;
+			conf_rx_en_out_reg 			<= conf_rx_en_out_reg_next;
+			conf_rx_jumbo_en_out_reg	<= conf_rx_jumbo_en_out_reg_next;
+			conf_rx_no_chk_crc_out_reg	<= conf_rx_no_chk_crc_out_reg_next;
+			catch_state					<= catch_state_next;
+			catch_counter 				<= catch_counter_next;
 		end
+	end
 endmodule
