@@ -19,24 +19,25 @@
 `timescale 1ns/1ps
 
 module top_tbw;
-    reg core_clk = 1'b0;
-    reg nf2_reset = 1'b0;
-    reg gtx_clk = 1'b0;
-    wire phy_mdc;
-    reg phy_mdio$inout$reg = 1'b0;
-    wire phy_mdio = phy_mdio$inout$reg;
-    reg rgmii_0_rx_ctl = 1'b0;
-    reg rgmii_0_rxc = 1'b0;
-    reg [3:0] rgmii_0_rxd = 4'b0000;
-    wire rgmii_0_tx_ctl;
-    wire rgmii_0_txc;
-    wire [3:0] rgmii_0_txd;
-    reg rgmii_1_rx_ctl = 1'b0;
-    reg rgmii_1_rxc = 1'b0;
-    reg [3:0] rgmii_1_rxd = 4'b0000;
-    wire rgmii_1_tx_ctl;
-    wire rgmii_1_txc;
-    wire [3:0] rgmii_1_txd;
+    reg 			core_clk = 1'b0;
+    reg 			nf2_reset = 1'b0;
+    reg 			gtx_clk = 1'b0;
+    wire 			phy_mdc;
+    reg 			phy_mdio$inout$reg = 1'b0;
+    wire 			phy_mdio = phy_mdio$inout$reg;
+    reg 			rgmii_0_rx_ctl = 1'b0;
+    reg 			rgmii_0_rxc = 1'b0;
+    reg 	[3:0] 	rgmii_0_rxd = 4'b0000;
+    wire 			rgmii_0_tx_ctl;
+    wire 			rgmii_0_txc;
+    wire 	[3:0]	rgmii_0_txd;
+    reg 			rgmii_1_rx_ctl = 1'b0;
+    reg 			rgmii_1_rxc = 1'b0;
+    reg 	[3:0] 	rgmii_1_rxd = 4'b0000;
+    wire 			rgmii_1_tx_ctl;
+    wire 			rgmii_1_txc;
+    wire 	[3:0] 	rgmii_1_txd;
+	wire 	[19:0] 	debug_data;
 
     parameter PERIOD = 8;
     parameter real DUTY_CYCLE = 0.5;
@@ -79,7 +80,9 @@ module top_tbw;
         .rgmii_1_rxd(rgmii_1_rxd),
         .rgmii_1_tx_ctl(rgmii_1_tx_ctl),
         .rgmii_1_txc(rgmii_1_txc),
-        .rgmii_1_txd(rgmii_1_txd));
+        .rgmii_1_txd(rgmii_1_txd),
+		.debug_data(debug_data)
+	);
 
     initial begin
         // -------------  Current Time:  100ns

@@ -32,7 +32,10 @@ module frame_catcher(
 	input	wire [7:0]	mac_rx_data,
 	input	wire		mac_rx_dvld,
 	input	wire		mac_rx_goodframe,
-	input	wire		mac_rx_badframe	
+	input	wire		mac_rx_badframe,
+	
+	//	Frame Caught signal to the Timer Module
+	output	wire		frame_caught
     );
 
 //	State Machine Parameters
@@ -49,6 +52,7 @@ module frame_catcher(
 	reg				conf_rx_no_chk_crc_out_reg;
 	reg				conf_rx_no_chk_crc_out_reg_next;
 
+	reg				frame_caught_out_reg;
 
 	reg [3:0]		catch_state;
 	reg [3:0]		catch_state_next;
@@ -61,7 +65,9 @@ module frame_catcher(
 	assign conf_rx_jumbo_en 	= conf_rx_jumbo_en_out_reg;
 	assign conf_rx_no_chk_crc 	= conf_rx_no_chk_crc_out_reg;
 
-//	Catch MAC 
+	assign frame_caught 		= frame_caught_out_reg;
+
+//	Configuration 
 	always @(posedge rx_clk) begin
 		conf_rx_en_out_reg_next 		= 1'b1;
 		conf_rx_jumbo_en_out_reg_next 	= 1'b0;
@@ -76,12 +82,16 @@ module frame_catcher(
 	end
 
 //	Frame Catcher
-/*	always @(posedge rx_clk) begin
-		case (catch_state) begin
+	always @(posedge rx_clk) begin
+		if (mac_rx_goodframe) begin
+			frame_caught_out_reg 	= 1;
+		end
+/*		case (catch_state) begin
 			
 		endcase
-	end
 */
+	end
+
 //	State Machine
 	always @(posedge rx_clk) begin
 	  if (reset) begin
@@ -101,6 +111,9 @@ module frame_catcher(
 				catch_state_next = IDOL;
 			end
 			RESET: begin
+				catch_state_next = IDOL;
+			end
+			default: begin
 				catch_state_next = IDOL;
 			end
 		endcase

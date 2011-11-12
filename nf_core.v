@@ -49,6 +49,7 @@ module nf_core(
 	input			rx_rgmii_0_clk_int,
 	input			rx_rgmii_1_clk_int,
 
+	output	[19:0]	debug_data,
 	//core clock
 	input			core_clk_int,
 
@@ -132,6 +133,9 @@ module nf_core(
 
 	wire			reset_MAC_1;
 
+	wire			frame_sent;
+	wire			frame_caught;
+
 	gig_eth_mac gig_eth_mac_1(
 		.reset				(reset),
 		.rx_clk				(rx_rgmii_1_clk_int),
@@ -174,7 +178,8 @@ module nf_core(
 		.conf_tx_no_gen_crc	(disable_crc_gen_0),
 		.mac_tx_data		(gmac_tx_data_0),
 		.mac_tx_dvld		(gmac_tx_dvld_0),
-		.mac_tx_ack			(gmac_tx_ack_0)
+		.mac_tx_ack			(gmac_tx_ack_0),
+		.frame_sent			(frame_sent)
 	);
 	
 	frame_catcher	frame_catcher(
@@ -186,6 +191,15 @@ module nf_core(
 		.mac_rx_data		(gmac_rx_data_1),
 		.mac_rx_dvld		(gmac_rx_dvld_1),
 		.mac_rx_goodframe	(gmac_rx_goodframe_1),
-		.mac_rx_badframe	(gmac_rx_badframe_1)
+		.mac_rx_badframe	(gmac_rx_badframe_1),
+		.frame_caught		(frame_caught)
+	);
+	
+	timer	timer(
+		.reset				(reset),
+		.tx_clk				(tx_rgmii_clk_int),
+		.time_out			(debug_data),
+		.frame_sent 		(frame_sent),
+		.frame_caught		(frame_caught)
 	);
 endmodule

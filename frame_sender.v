@@ -31,8 +31,10 @@ module frame_sender(
 	//	MAC Interface
 	output	wire [7:0]	mac_tx_data,
 	output	wire		mac_tx_dvld,
-	input	wire		mac_tx_ack
+	input	wire		mac_tx_ack,
 
+	//	Frame Sent signal to Timer Module
+	output wire			frame_sent
 );
 //	Local Parameters
 //	Sample Frames for testing purpose
@@ -76,6 +78,7 @@ module frame_sender(
 	localparam ETH_TYPE			= 4'd4;
 	localparam DATA				= 4'd5;
 	localparam WAIT_ACK			= 4'd6;
+	localparam STOPPED			= 4'd7;
 
 	localparam GEN_VALID_FRAME	= 4'hd;
 	localparam GEN_CHKSUM		= 4'he;
@@ -109,9 +112,11 @@ module frame_sender(
 	//Largest Herder length = 16*32bit
 	reg [16*32-1:0]	IP_HDR_reg;
 
-//	Frame Storing Register
-	reg [8*64-1:0] valid_arp; //64*8 <- 56*8 = 448;
+	//	Frame Storing Register
+	reg [8*64-1:0] 	valid_arp; //64*8 <- 56*8 = 448;
 
+	// Frame Sent signal Out Reg
+	reg 			frame_sent_out_reg;
 	// Assigning Wires
 	assign conf_tx_en		= conf_tx_en_out_reg;
 	assign conf_tx_jumbo_en		= conf_tx_jumbo_en_out_reg;
@@ -119,6 +124,8 @@ module frame_sender(
 
 	assign mac_tx_data		= mac_tx_data_out_reg;
 	assign mac_tx_dvld		= mac_tx_dvld_out_reg;
+	
+	assign frame_sent		= frame_sent_out_reg;
 
 //	Send MAC
 	always @(posedge tx_clk) begin
@@ -213,8 +220,9 @@ module frame_sender(
 //	State Machine & Counter
 	always @(posedge tx_clk or posedge reset) begin
 	  if (reset) begin
-		send_counter_next	= 1;
-		send_state_next	= RESET;
+		send_counter_next 	= 1;
+		send_state_next		= RESET;
+		frame_sent_out_reg 	= 0;
 	  end
 	  else
 		case(send_state)
@@ -238,14 +246,19 @@ module frame_sender(
 		  end
 		  DATA: begin
 			if(send_counter == (SAMPLE_FRAME_SIZE - 1)) begin
-				send_state_next 	= IDOL;
+//				send_state_next 	= IDOL;
+				send_state_next 	= STOPPED;
 				send_counter_next	= 1;
+				frame_sent_out_reg 	= 1;
 			end else
 				send_counter_next	= send_counter + 1;
 		  end
 		  RESET: begin
 			send_state_next = IDOL;
 			send_counter_next	= 1;
+		  end
+		  STOPPED: begin
+			send_counter_next = 1;
 		  end
 		  default: begin
 			send_state_next = IDOL;

@@ -354,22 +354,26 @@ module top(
 		.tx_rgmii_clk_int		(tx_rgmii_clk_int),
 		.rx_rgmii_0_clk_int		(rgmii_0_rxc),
 		.rx_rgmii_1_clk_int		(rgmii_1_rxc),
+		
+		.debug_data				(debug_data),
+
 		.core_clk_int			(core_clk_int),
 
 		.reset					(reset)
 
 	);
-	reg	[5:0]	debug_count;
-	reg	[5:0]	debug_count_next;
-	reg [19:0]	debug_data_out;
-	assign debug_data = debug_data_out;
+//	reg	[5:0]	debug_count;
+//	reg	[5:0]	debug_count_next;
+//	reg [19:0]	debug_data_out;
+//	assign debug_data = debug_data_out;
+/*
 always @(posedge tx_rgmii_clk90_int) begin
 	if(gmii_0_txd_int)
 		debug_data_out = 1;
 	else if(gmii_0_txd_int == 0)
 		debug_data_out = 0;
 end
-
+*/
 always @(posedge core_clk_int) begin
 	rgmii_0_reg = gmii_0_rxd_reg;
 	rgmii_1_reg = gmii_1_rxd_reg;
