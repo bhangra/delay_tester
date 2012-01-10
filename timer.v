@@ -23,9 +23,9 @@ module timer(
 	input	wire		tx_clk,
 
 	input	wire		frame_sent,
-	input	wire		frame_caught,
+	input	wire		frame_caught
 
-	output	wire [19:0]	time_out
+//	output	wire [19:0]	time_out
     );
 	localparam		IDOL	= 3'd0;
 	localparam		SENT	= 3'd1;
@@ -39,7 +39,7 @@ module timer(
 
 //	Assign Wires
 //	assign time_out	= time_out_reg;
-	assign time_out = time_count;
+//	assign time_out = time_count;
 //	time counter
 	always @(posedge tx_clk or posedge reset) begin
 		if (reset) begin

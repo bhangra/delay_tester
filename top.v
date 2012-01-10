@@ -63,16 +63,16 @@ module top(
 	output				rgmii_3_txc,
 	output	[3:0]		rgmii_3_txd,
 */	
-/*	//CPCI interface & clock
-	input 				cpci_clk,	//	62.5 MHz
-	input 				cpci_rd_wr_L,
-	input 				cpci_req,
-	input 	[26:0] 		cpci_addr,
-	input 	[31:0]		cpci_data,
-	output 				cpci_rd_rdy,
-	output 				cpci_wr_rdy,
-	output				nf2_err,
-	
+	//CPCI interface & clock
+//	input 				cpci_clk,	//	62.5 MHz
+//	input 				cpci_rd_wr_L,
+//	input 				cpci_req,
+//	input 	[26:0] 		cpci_addr,
+//	input 	[31:0]		cpci_data,
+//	output 				cpci_rd_rdy,
+//	output 				cpci_wr_rdy,
+//	output				nf2_err
+/*	
 	//Spartan Configuration Pin
 	input				cpci_rp_cclk,
 	input 				cpci_rp_done,
@@ -355,18 +355,24 @@ module top(
 		.rx_rgmii_0_clk_int		(rgmii_0_rxc),
 		.rx_rgmii_1_clk_int		(rgmii_1_rxc),
 		
-		.debug_data				(debug_data),
+//		.debug_data				(debug_data),
 
 		.core_clk_int			(core_clk_int),
 
 		.reset					(reset)
 
 	);
+	reg [17:0]	debug_data_out;
+	assign debug_data[17:0]	= debug_data_out;
+	assign debug_data[18]	= gmii_0_txd_int[0]; 	//AJ12	R
+	assign debug_data[19]	= gmii_0_tx_en_int;		//AK9	L
+
 //	reg	[5:0]	debug_count;
 //	reg	[5:0]	debug_count_next;
-//	reg [19:0]	debug_data_out;
-//	assign debug_data = debug_data_out;
-/*
+/*	
+	reg [19:0]	debug_data_out;
+	assign debug_data = debug_data_out;
+
 always @(posedge tx_rgmii_clk90_int) begin
 	if(gmii_0_txd_int)
 		debug_data_out = 1;
@@ -374,10 +380,51 @@ always @(posedge tx_rgmii_clk90_int) begin
 		debug_data_out = 0;
 end
 */
+
+//Tried to use Chipscope below:
+/*
 always @(posedge core_clk_int) begin
 	rgmii_0_reg = gmii_0_rxd_reg;
 	rgmii_1_reg = gmii_1_rxd_reg;
 end
-
+	wire [127:0] 	DATA;
+	wire [7:0]		TRIG0;
 	assign reset = (nf2_reset && !disable_reset) || !core_locked;
+	(*S="TRUE"*)wire CONTROL0;
+		//CHIPSCOPE	
+	TOP_icon TOP_icon_inst(
+		.CONTROL0(CONTROL0)
+	);
+	TOP_ila TOP_ila_inst(
+		.CONTROL(CONTROL0),
+		.CLK(core_clk_int),
+		.DATA(DATA),
+		.TRIG0(TRIG0)
+	);
+	assign DATA[0]		= rgmii_0_tx_ctl;
+	assign DATA[1]		= rgmii_0_txc;
+	assign DATA[5:2]	= rgmii_0_txd;
+	assign DATA[6]		= rgmii_1_rx_ctl;
+	assign DATA[7]		= rgmii_1_rxc;
+	assign DATA[11:8]	= rgmii_1_rxd;
+	assign DATA[127:12]	= 0;
+	assign TRIG0[0]		= reset;
+	assign TRIG0[7:1]	= 0;
+*/	
+/*
+	reg	[127:0]	DATA_reg;
+	reg [7:0]	TRIG0_reg;
+	assign 		DATA		= DATA_reg;
+	assign 		TRIG0		= TRIG0_reg;
+	always @(posedge core_clk_int or posedge reset) begin
+		if(reset) begin
+			DATA_reg	= 1;
+			TRIG0_reg	= 1;
+		end
+		else begin
+			DATA_reg	= DATA_reg + DATA_reg;
+			TRIG0_reg	= TRIG0_reg + TRIG0_reg;
+		end
+	end
+*/
 endmodule

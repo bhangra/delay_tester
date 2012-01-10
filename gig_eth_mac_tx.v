@@ -85,7 +85,7 @@ module gig_eth_mac_tx
 	reg [3:0]	tx_state_next;
 	reg [13:0]	tx_counter;
 	reg [13:0]	tx_counter_next;
-	reg			state_change;
+//	reg			state_change;
 	reg [13:0]	max_data_length;
 	wire [13:0]	min_data_length;
 
@@ -115,7 +115,7 @@ module gig_eth_mac_tx
 	assign gmii_txen_out_reg_next	= tx_state == TX_PREAMBLE || tx_state == TX_DATA || tx_state == TX_PAD || tx_state == TX_CRC || tx_state == TX_CORRUPT_FRAME;
 	assign gmii_txer_out_reg_next	= tx_state == TX_CORRUPT_FRAME;
 
-	always @(posedge tx_clk) begin
+	always @* begin
 	 if(tx_state 		== TX_PREAMBLE && tx_counter == 8)
 	 	gmii_txd_out_reg_next = 8'b11010101;
 	 else if(tx_state	== TX_PREAMBLE)
@@ -134,7 +134,7 @@ module gig_eth_mac_tx
 	assign tx_crc_rd	= tx_state == TX_CRC;
 
 	//update configuration betwwen frames
-	always @(posedge tx_clk) begin
+	always @* begin
 	 if(tx_state == TX_READY || tx_state == TX_IFG) begin
 	 	conf_tx_en_reg_next			= conf_tx_en;
 		conf_tx_jumbo_en_reg_next	= conf_tx_jumbo_en;
@@ -147,7 +147,7 @@ module gig_eth_mac_tx
 	 end
 	end
 
-	always @(posedge tx_clk) begin
+	always @* begin
 	 case ({conf_tx_jumbo_en_reg, conf_tx_no_gen_crc_reg})
 	 	2'b00:	max_data_length	= MAX_FRAME_SIZE_STANDARD - 4;
 		2'b01:	max_data_length = MAX_FRAME_SIZE_STANDARD;
@@ -160,15 +160,15 @@ module gig_eth_mac_tx
 
     //  count cycles  in each state, but not in TX_PAD
 	//  don't count while disabled (count is important for TX_IFG)
-    always @(negedge tx_clk) begin
-    if(!conf_tx_en_reg || state_change == 1 /*(tx_state_next != tx_state && tx_state_next != TX_PAD)*/)
+    always @* begin
+    if(!conf_tx_en_reg ||(tx_state_next != tx_state && tx_state_next != TX_PAD))
         tx_counter_next = 1;
     else
         tx_counter_next = tx_counter + 1;
     end
 
 	//	State Machine
-	always @(posedge tx_clk) begin
+	always @* begin
 	 if(!conf_tx_en_reg)
 	 	tx_state_next = TX_IFG;
 	 else begin
@@ -209,13 +209,13 @@ module gig_eth_mac_tx
 				end
 			end
 			TX_CRC: begin
-				if(tx_counter == 3)
+				if(tx_counter == 4)
 					tx_state_next = TX_IFG;
 			end
 			TX_CORRUPT_FRAME: begin
 				if(!mac_tx_dvld_in_reg)
 					tx_state_next = TX_IFG;
-				else	//	wait 'til client stops trasmitting current frame
+				else//	wait 'til client stops trasmitting current frame
 					tx_state_next = TX_WAIT_FOR_END;
 			end
 			TX_WAIT_FOR_END: begin
@@ -226,15 +226,12 @@ module gig_eth_mac_tx
 				if(tx_counter == 11) 
 					tx_state_next = TX_READY;
 			end
-			default: begin
-				tx_state_next = TX_IFG;
-			end
 		 endcase
 	 	end
-		if((tx_state_next != tx_state) && (tx_state_next != TX_PAD))
+/*		if((tx_state_next != tx_state) && (tx_state_next != TX_PAD))
 			state_change = 1;
 		else
-			state_change = 0;
+			state_change = 0;*/
 	 end
 	end
 

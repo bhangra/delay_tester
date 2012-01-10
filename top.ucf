@@ -1488,9 +1488,9 @@ NET "debug_data<14>"     LOC = "AK13"| IOSTANDARD = LVCMOS25 ;
 NET "debug_data<15>"     LOC = "AJ13"| IOSTANDARD = LVCMOS25 ;
 NET "debug_data<16>"     LOC = "AK11"| IOSTANDARD = LVCMOS25 ;
 NET "debug_data<17>"     LOC = "AJ11"| IOSTANDARD = LVCMOS25 ;
-NET "debug_data<18>"     LOC = "AG11"| IOSTANDARD = LVCMOS25 ;
+NET "debug_data<18>"     LOC = "AK9"| IOSTANDARD = LVCMOS25 ; #was AG11
 NET "debug_data<19>"     LOC = "AJ12"| IOSTANDARD = LVCMOS25 ;
-
+#AJ12 & AK9 are on good spot for connecting oschilo
 
 #NET "debug_led"        LOC = "AL5"  | IOSTANDARD = LVCMOS25 ;
 NET "gtx_clk"          LOC = "J17" | IOSTANDARD = LVCMOS25 ;

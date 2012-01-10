@@ -49,7 +49,7 @@ module nf_core(
 	input			rx_rgmii_0_clk_int,
 	input			rx_rgmii_1_clk_int,
 
-	output	[19:0]	debug_data,
+//	output	[19:0]	debug_data,
 	//core clock
 	input			core_clk_int,
 
@@ -198,7 +198,7 @@ module nf_core(
 	timer	timer(
 		.reset				(reset),
 		.tx_clk				(tx_rgmii_clk_int),
-		.time_out			(debug_data),
+//		.time_out			(debug_data),
 		.frame_sent 		(frame_sent),
 		.frame_caught		(frame_caught)
 	);

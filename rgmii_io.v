@@ -279,6 +279,6 @@ module rgmii_io(
 	end
 	
 	assign gmii_col_int = (gmii_tx_en_int | gmii_tx_er_int) & (gmii_rx_dv_reg | gmii_rx_er_reg);
-	assign gmii_crs_int = (gmii_tx_en_int | gmii_tx_er_int) & (gmii_rx_dv_reg | gmii_rx_er_reg);
+	assign gmii_crs_int = (gmii_tx_en_int | gmii_tx_er_int) | (gmii_rx_dv_reg | gmii_rx_er_reg);
 
 endmodule
